@@ -38,6 +38,15 @@ export default function RootLayout({ children }) {
             <Link href="/companies" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
               Companies
             </Link>
+            <Link href="/ledgers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
+              Ledgers
+            </Link>
+            <Link href="/customers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
+              Customers
+            </Link>
+            <Link href="/suppliers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
+              Suppliers
+            </Link>
             <Link href="/invoices" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
               Invoices
             </Link>

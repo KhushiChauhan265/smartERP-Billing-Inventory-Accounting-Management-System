@@ -32,10 +32,19 @@ CREATE TABLE customers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     company_id UUID REFERENCES companies(id) ON DELETE CASCADE NOT NULL,
     customer_name VARCHAR(255) NOT NULL,
+    code VARCHAR(50),
+    contact_person VARCHAR(255),
     mobile_number VARCHAR(20),
+    email VARCHAR(255),
     address TEXT,
+    gstin VARCHAR(20),
+    opening_balance DECIMAL(14, 2) DEFAULT 0,
+    opening_balance_type VARCHAR(10) DEFAULT 'DEBIT' CHECK (opening_balance_type IN ('DEBIT', 'CREDIT')),
+    is_active BOOLEAN DEFAULT true,
+    ledger_id UUID REFERENCES ledgers(id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (company_id, customer_name)
 );
 CREATE INDEX idx_customers_company_id ON customers(company_id);
 CREATE INDEX idx_customers_customer_name ON customers(customer_name);
@@ -45,10 +54,19 @@ CREATE TABLE suppliers (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     company_id UUID REFERENCES companies(id) ON DELETE CASCADE NOT NULL,
     supplier_name VARCHAR(255) NOT NULL,
+    code VARCHAR(50),
+    contact_person VARCHAR(255),
     mobile_number VARCHAR(20),
+    email VARCHAR(255),
     address TEXT,
+    gstin VARCHAR(20),
+    opening_balance DECIMAL(14, 2) DEFAULT 0,
+    opening_balance_type VARCHAR(10) DEFAULT 'CREDIT' CHECK (opening_balance_type IN ('DEBIT', 'CREDIT')),
+    is_active BOOLEAN DEFAULT true,
+    ledger_id UUID REFERENCES ledgers(id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (company_id, supplier_name)
 );
 CREATE INDEX idx_suppliers_company_id ON suppliers(company_id);
 CREATE INDEX idx_suppliers_supplier_name ON suppliers(supplier_name);
@@ -161,3 +179,21 @@ CREATE TRIGGER update_items_modtime BEFORE UPDATE ON items FOR EACH ROW EXECUTE 
 CREATE TRIGGER update_purchase_vouchers_modtime BEFORE UPDATE ON purchase_vouchers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_sales_vouchers_modtime BEFORE UPDATE ON sales_vouchers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_groups_modtime BEFORE UPDATE ON groups FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- 12) ledgers
+CREATE TABLE ledgers (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    company_id UUID REFERENCES companies(id) ON DELETE CASCADE NOT NULL,
+    name VARCHAR(255) NOT NULL,
+    code VARCHAR(50),
+    type VARCHAR(50) NOT NULL CHECK (type IN ('ASSET', 'LIABILITY', 'EQUITY', 'INCOME', 'EXPENSE')),
+    group_name VARCHAR(255),
+    opening_balance DECIMAL(14, 2) DEFAULT 0,
+    opening_balance_type VARCHAR(10) DEFAULT 'DEBIT' CHECK (opening_balance_type IN ('DEBIT', 'CREDIT')),
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (company_id, name)
+);
+CREATE INDEX idx_ledgers_company_id ON ledgers(company_id);
+CREATE TRIGGER update_ledgers_modtime BEFORE UPDATE ON ledgers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
