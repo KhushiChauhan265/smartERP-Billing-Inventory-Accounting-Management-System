@@ -97,97 +97,94 @@ export default function CompaniesPage() {
   const activeCompanyName = companies.find(c => c.id === activeCompanyId)?.company_name;
 
   return (
-    <div className="max-w-5xl mx-auto p-6 space-y-8">
-      <div className="flex justify-between items-center bg-gray-50 p-4 rounded-lg shadow-sm border">
-        <h1 className="text-2xl font-bold">Company Management</h1>
-        <div className="text-sm font-medium">
-          Active Company: {activeCompanyName ? <span className="text-blue-600 font-bold">{activeCompanyName}</span> : <span className="text-gray-500">None Selected</span>}
+    <div className="p-8 max-w-7xl mx-auto space-y-8 w-full">
+      <div className="flex justify-between items-center pb-4 border-b border-slate-700">
+        <h1 className="text-3xl font-bold text-white">Company Management</h1>
+        <div className="text-sm font-medium text-slate-300">
+          Active Company: {activeCompanyName ? <span className="text-indigo-400 font-bold">{activeCompanyName}</span> : <span className="text-slate-500">None Selected</span>}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div className="md:col-span-1 space-y-4">
-          <div className="bg-white p-4 border rounded-lg shadow-sm">
-            <h2 className="text-lg font-semibold mb-4">{editingId ? "Edit Company" : "Create New Company"}</h2>
-            {error && <div className="text-red-500 text-sm mb-4">{error}</div>}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="lg:col-span-1 space-y-4">
+          <div className="bg-slate-800 p-6 border border-slate-700 rounded-xl shadow-sm">
+            <h2 className="text-xl font-semibold mb-6 text-white">{editingId ? "Edit Company" : "Create New Company"}</h2>
+            {error && <div className="text-red-400 text-sm mb-4">{error}</div>}
             
-            {companies.length >= 5 && !editingId ? (
-              <div className="text-sm text-red-600 bg-red-50 p-3 rounded border border-red-200">
-                You have reached the maximum limit of 5 companies.
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit(onSubmit)} className="space-y-3">
+            <div className="text-sm text-slate-400 mb-6">
+              Manage your companies here. You can add as many as you need.
+            </div>
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium">Company Name *</label>
-                  <Input {...register("company_name", { required: true })} placeholder="My Business" />
+                  <label className="text-sm font-medium text-slate-300 block mb-1">Company Name *</label>
+                  <Input {...register("company_name", { required: true })} placeholder="My Business" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">GST Number</label>
-                  <Input {...register("gst_number")} placeholder="22AAAAA0000A1Z5" />
+                  <label className="text-sm font-medium text-slate-300 block mb-1">GST Number</label>
+                  <Input {...register("gst_number")} placeholder="22AAAAA0000A1Z5" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">State</label>
-                  <Input {...register("state")} placeholder="Maharashtra" />
+                  <label className="text-sm font-medium text-slate-300 block mb-1">State</label>
+                  <Input {...register("state")} placeholder="Maharashtra" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Address</label>
-                  <Input {...register("address")} placeholder="123 Main St" />
+                  <label className="text-sm font-medium text-slate-300 block mb-1">Address</label>
+                  <Input {...register("address")} placeholder="123 Main St" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium">Contact Number</label>
-                  <Input {...register("contact_number")} placeholder="9876543210" />
+                  <label className="text-sm font-medium text-slate-300 block mb-1">Contact Number</label>
+                  <Input {...register("contact_number")} placeholder="9876543210" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-4">
                   <div className="flex-1">
-                    <label className="text-sm font-medium">FY Start</label>
-                    <Input {...register("financial_year_start")} placeholder="01-04-2023" />
+                    <label className="text-sm font-medium text-slate-300 block mb-1">FY Start</label>
+                    <Input {...register("financial_year_start")} placeholder="01-04-2023" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
                   </div>
                   <div className="flex-1">
-                    <label className="text-sm font-medium">FY End</label>
-                    <Input {...register("financial_year_end")} placeholder="31-03-2024" />
+                    <label className="text-sm font-medium text-slate-300 block mb-1">FY End</label>
+                    <Input {...register("financial_year_end")} placeholder="31-03-2024" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
                   </div>
                 </div>
-                <div className="pt-2 flex gap-2">
-                  <Button type="submit" className="w-full">{editingId ? "Update" : "Save"}</Button>
+                <div className="pt-4 flex gap-3">
+                  <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white border-none">{editingId ? "Update" : "Save"}</Button>
                   {editingId && (
-                    <Button type="button" variant="outline" onClick={() => {setEditingId(null); reset();}}>Cancel</Button>
+                    <Button type="button" variant="outline" onClick={() => {setEditingId(null); reset();}} className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white">Cancel</Button>
                   )}
                 </div>
               </form>
-            )}
           </div>
         </div>
 
-        <div className="md:col-span-2">
-          <div className="bg-white border rounded-lg shadow-sm overflow-hidden">
-            <table className="w-full text-sm text-left">
-              <thead className="bg-gray-100 text-gray-700 uppercase text-xs">
+        <div className="lg:col-span-2">
+          <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-sm overflow-hidden">
+            <table className="w-full text-sm text-left text-slate-300">
+              <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs border-b border-slate-700">
                 <tr>
-                  <th className="px-4 py-3">Company Name</th>
-                  <th className="px-4 py-3">GST / State</th>
-                  <th className="px-4 py-3 text-right">Actions</th>
+                  <th className="px-6 py-4 font-medium">Company Name</th>
+                  <th className="px-6 py-4 font-medium">GST / State</th>
+                  <th className="px-6 py-4 font-medium text-right">Actions</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y divide-slate-700/50">
                 {companies.length === 0 ? (
                   <tr>
-                    <td colSpan="3" className="px-4 py-8 text-center text-gray-500">No companies found. Create one to get started.</td>
+                    <td colSpan="3" className="px-6 py-12 text-center text-slate-500">No companies found. Create one to get started.</td>
                   </tr>
                 ) : (
                   companies.map(comp => (
-                    <tr key={comp.id} className="border-b hover:bg-gray-50">
-                      <td className="px-4 py-3 font-medium">
-                        {comp.company_name}
-                        {activeCompanyId === comp.id && <span className="ml-2 text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded-full">Active</span>}
+                    <tr key={comp.id} className="hover:bg-slate-700/30 transition-colors">
+                      <td className="px-6 py-4">
+                        <div className="font-semibold text-slate-100">{comp.company_name}</div>
+                        {activeCompanyId === comp.id && <span className="inline-block mt-1 text-[10px] font-bold tracking-wider uppercase bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/30">Active</span>}
                       </td>
-                      <td className="px-4 py-3">
-                        <div className="text-xs">{comp.gst_number || "No GST"}</div>
-                        <div className="text-xs text-gray-500">{comp.state || "No State"}</div>
+                      <td className="px-6 py-4">
+                        <div className="text-slate-300">{comp.gst_number || "No GST"}</div>
+                        <div className="text-xs text-slate-500 mt-0.5">{comp.state || "No State"}</div>
                       </td>
-                      <td className="px-4 py-3 text-right space-x-2">
-                        <Button variant="outline" size="sm" onClick={() => handleSelectActive(comp.id)}>Select</Button>
-                        <Button variant="secondary" size="sm" onClick={() => handleEdit(comp)}>Edit</Button>
-                        <Button variant="destructive" size="sm" onClick={() => handleDelete(comp.id)}>Delete</Button>
+                      <td className="px-6 py-4 text-right space-x-3">
+                        <Button variant="outline" size="sm" onClick={() => handleSelectActive(comp.id)} className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white">Select</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleEdit(comp)} className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white">Edit</Button>
+                        <Button variant="destructive" size="sm" onClick={() => handleDelete(comp.id)} className="bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 hover:border-red-500">Delete</Button>
                       </td>
                     </tr>
                   ))

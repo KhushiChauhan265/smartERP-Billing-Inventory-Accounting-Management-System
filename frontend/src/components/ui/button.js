@@ -1,13 +1,13 @@
 import React from "react";
 
 export function Button({ className, variant = "default", size = "default", ...props }) {
-  const base = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50";
+  const base = "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-indigo-500 disabled:pointer-events-none disabled:opacity-50";
   const variants = {
-    default: "bg-black text-white shadow hover:bg-black/90",
-    destructive: "bg-red-500 text-white shadow-sm hover:bg-red-500/90",
-    outline: "border border-gray-200 bg-transparent shadow-sm hover:bg-gray-100 text-black",
-    secondary: "bg-gray-100 text-black shadow-sm hover:bg-gray-100/80",
-    ghost: "hover:bg-gray-100 hover:text-black",
+    default: "bg-indigo-600 text-white shadow hover:bg-indigo-500 border border-transparent",
+    destructive: "bg-red-500 text-white shadow-sm hover:bg-red-600 border border-transparent",
+    outline: "border border-slate-600 bg-transparent shadow-sm hover:bg-slate-700 text-slate-200",
+    secondary: "bg-slate-700 text-slate-100 shadow-sm hover:bg-slate-600 border border-transparent",
+    ghost: "hover:bg-slate-800 hover:text-slate-100 text-slate-300",
   };
   const sizes = {
     default: "h-9 px-4 py-2",

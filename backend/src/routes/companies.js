@@ -29,14 +29,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({ message: "Company name is required" });
     }
 
-    const countResult = await pool.query(
-      "SELECT count(*) FROM companies WHERE user_id = $1 AND is_active = true",
-      [req.user.userId]
-    );
-    
-    if (parseInt(countResult.rows[0].count) >= 5) {
-      return res.status(400).json({ message: "Maximum 5 active companies allowed per user" });
-    }
+
 
     const insertResult = await pool.query(
       `INSERT INTO companies 
