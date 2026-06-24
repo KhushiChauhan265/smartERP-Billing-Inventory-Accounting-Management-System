@@ -16,6 +16,7 @@ app.use("/api", indexRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/companies", companiesRouter);
 app.use("/api/ledgers", ledgersRouter);
+app.use("/api/groups", require("./routes/groups"));
 app.use("/api/customers", require("./routes/customers"));
 app.use("/api/suppliers", require("./routes/suppliers"));
 

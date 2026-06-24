@@ -42,6 +42,7 @@ CREATE TABLE customers (
     opening_balance_type VARCHAR(10) DEFAULT 'DEBIT' CHECK (opening_balance_type IN ('DEBIT', 'CREDIT')),
     is_active BOOLEAN DEFAULT true,
     ledger_id UUID REFERENCES ledgers(id) ON DELETE SET NULL,
+    group_id UUID REFERENCES account_groups(id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (company_id, customer_name)
@@ -64,6 +65,7 @@ CREATE TABLE suppliers (
     opening_balance_type VARCHAR(10) DEFAULT 'CREDIT' CHECK (opening_balance_type IN ('DEBIT', 'CREDIT')),
     is_active BOOLEAN DEFAULT true,
     ledger_id UUID REFERENCES ledgers(id) ON DELETE SET NULL,
+    group_id UUID REFERENCES account_groups(id) ON DELETE SET NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     UNIQUE (company_id, supplier_name)
@@ -150,16 +152,23 @@ CREATE TABLE sales_voucher_items (
 CREATE INDEX idx_sv_items_voucher_id ON sales_voucher_items(sales_voucher_id);
 CREATE INDEX idx_sv_items_item_id ON sales_voucher_items(item_id);
 
--- 10) groups (Optional)
-CREATE TABLE groups (
+-- 10) account_groups
+DROP TABLE IF EXISTS groups CASCADE;
+CREATE TABLE account_groups (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     company_id UUID REFERENCES companies(id) ON DELETE CASCADE NOT NULL,
     name VARCHAR(255) NOT NULL,
-    type VARCHAR(50) NOT NULL,
+    code VARCHAR(50),
+    type VARCHAR(50) NOT NULL CHECK (type IN ('ASSET', 'LIABILITY', 'EQUITY', 'INCOME', 'EXPENSE')),
+    parent_group_id UUID REFERENCES account_groups(id) ON DELETE SET NULL,
+    is_primary BOOLEAN DEFAULT false,
+    is_active BOOLEAN DEFAULT true,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (company_id, name)
 );
-CREATE INDEX idx_groups_company_id ON groups(company_id);
+CREATE INDEX idx_account_groups_company_id ON account_groups(company_id);
+CREATE INDEX idx_account_groups_parent_id ON account_groups(parent_group_id);
 
 -- 11) Updated_at trigger function
 CREATE OR REPLACE FUNCTION update_updated_at_column()
@@ -178,7 +187,7 @@ CREATE TRIGGER update_suppliers_modtime BEFORE UPDATE ON suppliers FOR EACH ROW 
 CREATE TRIGGER update_items_modtime BEFORE UPDATE ON items FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_purchase_vouchers_modtime BEFORE UPDATE ON purchase_vouchers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 CREATE TRIGGER update_sales_vouchers_modtime BEFORE UPDATE ON sales_vouchers FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-CREATE TRIGGER update_groups_modtime BEFORE UPDATE ON groups FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+CREATE TRIGGER update_account_groups_modtime BEFORE UPDATE ON account_groups FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- 12) ledgers
 CREATE TABLE ledgers (

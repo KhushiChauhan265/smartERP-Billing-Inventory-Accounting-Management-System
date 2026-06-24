@@ -41,6 +41,9 @@ export default function RootLayout({ children }) {
             <Link href="/ledgers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
               Ledgers
             </Link>
+            <Link href="/groups" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
+              Groups
+            </Link>
             <Link href="/customers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
               Customers
             </Link>

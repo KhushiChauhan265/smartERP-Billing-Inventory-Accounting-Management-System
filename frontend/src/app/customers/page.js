@@ -6,11 +6,12 @@ import { Input } from "@/components/ui/input";
 
 export default function CustomersPage() {
   const [customers, setCustomers] = useState([]);
+  const [groups, setGroups] = useState([]);
   const [activeCompanyId, setActiveCompanyId] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
   const { register, handleSubmit, reset, setValue } = useForm({
-    defaultValues: { openingBalanceType: "DEBIT", openingBalance: 0 }
+    defaultValues: { openingBalanceType: "DEBIT", openingBalance: 0, groupId: "" }
   });
   
   const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
@@ -35,8 +36,25 @@ export default function CustomersPage() {
     }
   };
 
+  const fetchGroups = async () => {
+    if (!token || !activeCompanyId) return;
+    try {
+      const res = await fetch(`${API_BASE}/api/groups?companyId=${activeCompanyId}&isActive=true`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (!res.ok) throw new Error("Failed to fetch groups");
+      const data = await res.json();
+      // Filter for ASSET and INCOME type groups
+      const filtered = data.groups.filter(g => g.type === "ASSET" || g.type === "INCOME");
+      setGroups(filtered);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     fetchCustomers();
+    fetchGroups();
   }, [token, activeCompanyId]);
 
   const onSubmit = async (data) => {
@@ -63,7 +81,7 @@ export default function CustomersPage() {
       const result = await res.json();
       if (!res.ok) throw new Error(result.message || "Failed to save customer");
       
-      reset({ openingBalanceType: "DEBIT", openingBalance: 0 });
+      reset({ openingBalanceType: "DEBIT", openingBalance: 0, groupId: "" });
       setEditingId(null);
       fetchCustomers();
     } catch (err) {
@@ -82,6 +100,7 @@ export default function CustomersPage() {
     setValue("gstin", c.gstin || "");
     setValue("openingBalance", c.opening_balance);
     setValue("openingBalanceType", c.opening_balance_type);
+    setValue("groupId", c.group_id || "");
   };
 
   const handleDelete = async (id) => {
@@ -161,6 +180,16 @@ export default function CustomersPage() {
                 <Input {...register("gstin")} placeholder="27ABCDE1234F1Z5" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
               </div>
 
+              <div>
+                <label className="text-sm font-medium text-slate-300 block mb-1">Group</label>
+                <select {...register("groupId")} className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                  <option value="">None</option>
+                  {groups.map(g => (
+                    <option key={g.id} value={g.id}>{g.name}</option>
+                  ))}
+                </select>
+              </div>
+
               <div className="flex gap-4">
                 <div className="flex-1">
                   <label className="text-sm font-medium text-slate-300 block mb-1">Opening Balance</label>
@@ -191,6 +220,7 @@ export default function CustomersPage() {
               <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs border-b border-slate-700">
                 <tr>
                   <th className="px-6 py-4 font-medium">Customer Details</th>
+                  <th className="px-6 py-4 font-medium">Group</th>
                   <th className="px-6 py-4 font-medium">Contact</th>
                   <th className="px-6 py-4 font-medium text-right">Opening Bal</th>
                   <th className="px-6 py-4 font-medium text-right">Actions</th>
@@ -199,7 +229,7 @@ export default function CustomersPage() {
               <tbody className="divide-y divide-slate-700/50">
                 {customers.length === 0 ? (
                   <tr>
-                    <td colSpan="4" className="px-6 py-12 text-center text-slate-500">No customers found for this company.</td>
+                    <td colSpan="5" className="px-6 py-12 text-center text-slate-500">No customers found for this company.</td>
                   </tr>
                 ) : (
                   customers.map(c => (
@@ -209,6 +239,9 @@ export default function CustomersPage() {
                         {c.code && <div className="text-xs text-slate-500 mt-0.5">{c.code}</div>}
                         {c.gstin && <div className="text-xs text-indigo-400 mt-0.5">GST: {c.gstin}</div>}
                         {!c.is_active && <span className="inline-block mt-1 text-[10px] font-bold uppercase bg-red-500/20 text-red-400 px-2 py-0.5 rounded border border-red-500/30">Inactive</span>}
+                      </td>
+                      <td className="px-6 py-4">
+                        <div className="text-slate-300">{c.group_name || 'None'}</div>
                       </td>
                       <td className="px-6 py-4">
                         <div className="text-slate-300">{c.contact_person || '-'}</div>

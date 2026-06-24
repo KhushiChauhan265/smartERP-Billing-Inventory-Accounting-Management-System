@@ -28,7 +28,11 @@ router.get("/", checkCompanyAccess, async (req, res) => {
   try {
     const { companyId } = req.query;
     const result = await pool.query(
-      "SELECT * FROM customers WHERE company_id = $1 ORDER BY customer_name ASC",
+      `SELECT c.*, g.name as group_name 
+       FROM customers c 
+       LEFT JOIN account_groups g ON c.group_id = g.id 
+       WHERE c.company_id = $1 
+       ORDER BY c.customer_name ASC`,
       [companyId]
     );
     res.json({ customers: result.rows });
@@ -42,7 +46,13 @@ router.get("/:id", checkCompanyAccess, async (req, res) => {
   try {
     const { id } = req.params;
     const { companyId } = req.query;
-    const result = await pool.query("SELECT * FROM customers WHERE id = $1 AND company_id = $2", [id, companyId]);
+    const result = await pool.query(
+      `SELECT c.*, g.name as group_name 
+       FROM customers c 
+       LEFT JOIN account_groups g ON c.group_id = g.id 
+       WHERE c.id = $1 AND c.company_id = $2`,
+      [id, companyId]
+    );
     if (result.rows.length === 0) return res.status(404).json({ message: "Not found" });
     res.json({ customer: result.rows[0] });
   } catch (error) {
@@ -53,7 +63,7 @@ router.get("/:id", checkCompanyAccess, async (req, res) => {
 // POST /api/customers
 router.post("/", checkCompanyAccess, async (req, res) => {
   try {
-    const { companyId, name, code, contactPerson, mobileNumber, email, address, gstin, openingBalance, openingBalanceType } = req.body;
+    const { companyId, name, code, contactPerson, mobileNumber, email, address, gstin, openingBalance, openingBalanceType, groupId } = req.body;
     if (!name) return res.status(400).json({ message: "Name is required" });
 
     // 1. Create Ledger
@@ -67,9 +77,9 @@ router.post("/", checkCompanyAccess, async (req, res) => {
     // 2. Create Customer
     const insertResult = await pool.query(
       `INSERT INTO customers 
-        (company_id, customer_name, code, contact_person, mobile_number, email, address, gstin, opening_balance, opening_balance_type, ledger_id) 
-       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) RETURNING *`,
-      [companyId, name, code || null, contactPerson || null, mobileNumber || null, email || null, address || null, gstin || null, openingBalance || 0, openingBalanceType || 'DEBIT', ledgerId]
+        (company_id, customer_name, code, contact_person, mobile_number, email, address, gstin, opening_balance, opening_balance_type, ledger_id, group_id) 
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *`,
+      [companyId, name, code || null, contactPerson || null, mobileNumber || null, email || null, address || null, gstin || null, openingBalance || 0, openingBalanceType || 'DEBIT', ledgerId, groupId || null]
     );
 
     res.status(201).json({ customer: insertResult.rows[0] });
@@ -84,7 +94,7 @@ router.post("/", checkCompanyAccess, async (req, res) => {
 router.put("/:id", checkCompanyAccess, async (req, res) => {
   try {
     const { id } = req.params;
-    const { companyId, name, code, contactPerson, mobileNumber, email, address, gstin, openingBalance, openingBalanceType, isActive } = req.body;
+    const { companyId, name, code, contactPerson, mobileNumber, email, address, gstin, openingBalance, openingBalanceType, isActive, groupId } = req.body;
 
     const check = await pool.query("SELECT ledger_id FROM customers WHERE id = $1 AND company_id = $2", [id, companyId]);
     if (check.rows.length === 0) return res.status(404).json({ message: "Not found" });
@@ -93,9 +103,9 @@ router.put("/:id", checkCompanyAccess, async (req, res) => {
 
     const updateResult = await pool.query(
       `UPDATE customers SET 
-        customer_name = COALESCE($1, customer_name), code = $2, contact_person = $3, mobile_number = $4, email = $5, address = $6, gstin = $7, opening_balance = COALESCE($8, opening_balance), opening_balance_type = COALESCE($9, opening_balance_type), is_active = COALESCE($10, is_active)
-       WHERE id = $11 AND company_id = $12 RETURNING *`,
-      [name, code || null, contactPerson || null, mobileNumber || null, email || null, address || null, gstin || null, openingBalance, openingBalanceType, isActive, id, companyId]
+        customer_name = COALESCE($1, customer_name), code = $2, contact_person = $3, mobile_number = $4, email = $5, address = $6, gstin = $7, opening_balance = COALESCE($8, opening_balance), opening_balance_type = COALESCE($9, opening_balance_type), is_active = COALESCE($10, is_active), group_id = $11
+       WHERE id = $12 AND company_id = $13 RETURNING *`,
+      [name, code || null, contactPerson || null, mobileNumber || null, email || null, address || null, gstin || null, openingBalance, openingBalanceType, isActive, groupId || null, id, companyId]
     );
 
     if (ledgerId) {
