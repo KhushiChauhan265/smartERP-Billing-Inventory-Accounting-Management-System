@@ -79,9 +79,16 @@ CREATE TABLE items (
     company_id UUID REFERENCES companies(id) ON DELETE CASCADE NOT NULL,
     item_name VARCHAR(255) NOT NULL,
     sku VARCHAR(100),
+    barcode VARCHAR(100),
+    hsn_sac VARCHAR(50),
+    unit_name VARCHAR(50) DEFAULT 'PCS',
+    category VARCHAR(100),
     purchase_price DECIMAL(10, 2) NOT NULL DEFAULT 0,
     selling_price DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    opening_stock INTEGER DEFAULT 0,
     quantity INTEGER NOT NULL DEFAULT 0,
+    reorder_level INTEGER DEFAULT 0,
+    is_active BOOLEAN DEFAULT true,
     gst_percentage DECIMAL(5, 2) DEFAULT 0,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -89,6 +96,45 @@ CREATE TABLE items (
 );
 CREATE INDEX idx_items_company_id ON items(company_id);
 CREATE INDEX idx_items_item_name ON items(item_name);
+
+-- 5b) stock_movements
+CREATE TABLE stock_movements (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    company_id UUID REFERENCES companies(id) ON DELETE CASCADE NOT NULL,
+    item_id UUID REFERENCES items(id) ON DELETE CASCADE NOT NULL,
+    voucher_type VARCHAR(50) NOT NULL, -- 'PURCHASE', 'SALES', 'OPENING', 'ADJUSTMENT'
+    voucher_id UUID,
+    qty_in INTEGER DEFAULT 0,
+    qty_out INTEGER DEFAULT 0,
+    rate DECIMAL(10, 2) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX idx_stock_movements_company_id ON stock_movements(company_id);
+CREATE INDEX idx_stock_movements_item_id ON stock_movements(item_id);
+
+CREATE OR REPLACE FUNCTION update_item_quantity()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF (TG_OP = 'INSERT') THEN
+        UPDATE items 
+        SET quantity = quantity + NEW.qty_in - NEW.qty_out
+        WHERE id = NEW.item_id;
+    ELSIF (TG_OP = 'UPDATE') THEN
+        UPDATE items 
+        SET quantity = quantity - OLD.qty_in + OLD.qty_out + NEW.qty_in - NEW.qty_out
+        WHERE id = NEW.item_id;
+    ELSIF (TG_OP = 'DELETE') THEN
+        UPDATE items 
+        SET quantity = quantity - OLD.qty_in + OLD.qty_out
+        WHERE id = OLD.item_id;
+    END IF;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trg_stock_movements_qty_update
+AFTER INSERT OR UPDATE OR DELETE ON stock_movements
+FOR EACH ROW EXECUTE FUNCTION update_item_quantity();
 
 -- 6) purchase_vouchers
 CREATE TABLE purchase_vouchers (
