@@ -11,7 +11,10 @@ export default function DashboardPage() {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
 
   useEffect(() => {
-    if (!token) return;
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
     
     // Fetch user
     fetch(`${API_BASE}/api/auth/me`, {

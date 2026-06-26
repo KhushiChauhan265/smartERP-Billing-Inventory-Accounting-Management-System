@@ -3,9 +3,9 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-export default function PurchaseVouchersPage() {
+export default function SalesVouchersPage() {
   const [vouchers, setVouchers] = useState([]);
-  const [suppliers, setSuppliers] = useState([]);
+  const [customers, setCustomers] = useState([]);
   const [itemsList, setItemsList] = useState([]);
   
   const [activeCompanyId, setActiveCompanyId] = useState(null);
@@ -15,9 +15,10 @@ export default function PurchaseVouchersPage() {
   const [success, setSuccess] = useState("");
 
   // Form states
-  const [supplierId, setSupplierId] = useState("");
+  const [customerId, setCustomerId] = useState("");
   const [voucherDate, setVoucherDate] = useState(new Date().toISOString().split("T")[0]);
   const [voucherNumber, setVoucherNumber] = useState("");
+  const [referenceNo, setReferenceNo] = useState("");
   const [remarks, setRemarks] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
   const [voucherItems, setVoucherItems] = useState([
@@ -56,7 +57,7 @@ export default function PurchaseVouchersPage() {
     if (!token || !activeCompanyId) return;
     try {
       // Fetch Vouchers
-      const vRes = await fetch(`${API_BASE}/api/purchase-vouchers?companyId=${activeCompanyId}`, {
+      const vRes = await fetch(`${API_BASE}/api/sales-vouchers?companyId=${activeCompanyId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (vRes.ok) {
@@ -64,14 +65,13 @@ export default function PurchaseVouchersPage() {
         setVouchers(vData.vouchers || []);
       }
 
-      // Fetch Suppliers
-      const sRes = await fetch(`${API_BASE}/api/suppliers?companyId=${activeCompanyId}`, {
+      // Fetch Customers
+      const cRes = await fetch(`${API_BASE}/api/customers?companyId=${activeCompanyId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (sRes.ok) {
-        const sData = await sRes.json();
-        // Only active suppliers
-        setSuppliers(sData.suppliers?.filter(s => s.is_active) || []);
+      if (cRes.ok) {
+        const cData = await cRes.json();
+        setCustomers(cData.customers?.filter(c => c.is_active) || []);
       }
 
       // Fetch Items
@@ -80,7 +80,6 @@ export default function PurchaseVouchersPage() {
       });
       if (iRes.ok) {
         const iData = await iRes.json();
-        // Only active items
         setItemsList(iData.items?.filter(i => i.is_active) || []);
       }
     } catch (err) {
@@ -112,7 +111,7 @@ export default function PurchaseVouchersPage() {
   useEffect(() => {
     if (!editingId && !voucherNumber) {
       const randomNum = Math.floor(1000 + Math.random() * 9000);
-      setVoucherNumber(`PV-${new Date().getFullYear() % 100}${String(new Date().getMonth() + 1).padStart(2, '0')}-${randomNum}`);
+      setVoucherNumber(`SV-${new Date().getFullYear() % 100}${String(new Date().getMonth() + 1).padStart(2, '0')}-${randomNum}`);
     }
   }, [editingId, voucherNumber]);
 
@@ -120,11 +119,11 @@ export default function PurchaseVouchersPage() {
     const updated = [...voucherItems];
     updated[index][field] = value;
 
-    // If item is selected, prefill rate and gstRate
+    // If item is selected, prefill selling rate and gstRate
     if (field === "itemId") {
       const selectedItem = itemsList.find(i => i.id === value);
       if (selectedItem) {
-        updated[index].rate = selectedItem.purchase_price || 0;
+        updated[index].rate = selectedItem.selling_price || 0;
         updated[index].gstRate = selectedItem.gst_percentage || 0;
       } else {
         updated[index].rate = 0;
@@ -145,9 +144,10 @@ export default function PurchaseVouchersPage() {
 
   const resetForm = () => {
     setEditingId(null);
-    setSupplierId("");
+    setCustomerId("");
     setVoucherDate(new Date().toISOString().split("T")[0]);
     setVoucherNumber("");
+    setReferenceNo("");
     setRemarks("");
     setDiscountAmount(0);
     setVoucherItems([{ itemId: "", quantity: 1, rate: 0, gstRate: 0 }]);
@@ -160,12 +160,12 @@ export default function PurchaseVouchersPage() {
     setError("");
     setSuccess("");
 
-    if (!supplierId) {
-      setError("Please select a Supplier.");
+    if (!customerId) {
+      setError("Please select a Customer.");
       return;
     }
     if (!voucherNumber) {
-      setError("Voucher Number is required.");
+      setError("Invoice Number is required.");
       return;
     }
     if (voucherItems.some(item => !item.itemId || item.quantity <= 0 || item.rate < 0)) {
@@ -176,9 +176,10 @@ export default function PurchaseVouchersPage() {
     try {
       const payload = {
         companyId: activeCompanyId,
-        supplierId,
+        customerId,
         voucherDate,
         voucherNumber,
+        referenceNo,
         discountAmount: parseFloat(discountAmount) || 0,
         remarks,
         items: voucherItems.map(item => ({
@@ -190,8 +191,8 @@ export default function PurchaseVouchersPage() {
       };
 
       const url = editingId 
-        ? `${API_BASE}/api/purchase-vouchers/${editingId}?companyId=${activeCompanyId}`
-        : `${API_BASE}/api/purchase-vouchers?companyId=${activeCompanyId}`;
+        ? `${API_BASE}/api/sales-vouchers/${editingId}?companyId=${activeCompanyId}`
+        : `${API_BASE}/api/sales-vouchers?companyId=${activeCompanyId}`;
       const method = editingId ? "PUT" : "POST";
 
       const res = await fetch(url, {
@@ -205,10 +206,10 @@ export default function PurchaseVouchersPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.message || "Failed to save purchase voucher");
+        throw new Error(data.message || "Failed to save sales voucher");
       }
 
-      setSuccess(editingId ? "Voucher updated successfully!" : "Voucher created successfully!");
+      setSuccess(editingId ? "Invoice updated successfully!" : "Invoice created successfully!");
       resetForm();
       fetchData();
     } catch (err) {
@@ -222,7 +223,7 @@ export default function PurchaseVouchersPage() {
     setEditingId(voucher.id);
     
     try {
-      const res = await fetch(`${API_BASE}/api/purchase-vouchers/${voucher.id}?companyId=${activeCompanyId}`, {
+      const res = await fetch(`${API_BASE}/api/sales-vouchers/${voucher.id}?companyId=${activeCompanyId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       if (!res.ok) throw new Error("Failed to load voucher details");
@@ -230,11 +231,11 @@ export default function PurchaseVouchersPage() {
       const data = await res.json();
       const v = data.voucher;
       
-      setSupplierId(v.supplier_id);
-      // Format date correctly to YYYY-MM-DD
-      const dateFormatted = new Date(v.purchase_date).toISOString().split("T")[0];
+      setCustomerId(v.customer_id);
+      const dateFormatted = new Date(v.invoice_date).toISOString().split("T")[0];
       setVoucherDate(dateFormatted);
-      setVoucherNumber(v.voucher_number);
+      setVoucherNumber(v.invoice_number);
+      setReferenceNo(v.reference_no || "");
       setRemarks(v.remarks || "");
       setDiscountAmount(Number(v.discount_amount) || 0);
 
@@ -253,21 +254,21 @@ export default function PurchaseVouchersPage() {
   };
 
   const handleDelete = async (id) => {
-    if (!confirm("Are you sure you want to cancel/delete this purchase voucher? Stock levels will be automatically reversed.")) return;
+    if (!confirm("Are you sure you want to cancel/delete this sales invoice? Stock levels will be automatically reversed.")) return;
     setError("");
     setSuccess("");
     try {
-      const res = await fetch(`${API_BASE}/api/purchase-vouchers/${id}?companyId=${activeCompanyId}`, {
+      const res = await fetch(`${API_BASE}/api/sales-vouchers/${id}?companyId=${activeCompanyId}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
 
       if (!res.ok) {
         const data = await res.json();
-        throw new Error(data.message || "Failed to cancel voucher");
+        throw new Error(data.message || "Failed to cancel invoice");
       }
 
-      setSuccess("Voucher cancelled and stock levels adjusted.");
+      setSuccess("Invoice cancelled and stock levels adjusted.");
       fetchData();
       if (editingId === id) {
         resetForm();
@@ -280,9 +281,9 @@ export default function PurchaseVouchersPage() {
   if (!activeCompanyId) {
     return (
       <div className="p-8 max-w-7xl mx-auto w-full">
-        <h1 className="text-3xl font-bold text-white mb-4">Purchase Voucher Management</h1>
+        <h1 className="text-3xl font-bold text-white mb-4">Sales Invoice Management</h1>
         <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 text-slate-300">
-          Please select an active company from Company Management to manage purchase vouchers.
+          Please select an active company from Company Management to manage sales invoices.
         </div>
       </div>
     );
@@ -293,53 +294,65 @@ export default function PurchaseVouchersPage() {
       {/* Header */}
       <div className="flex justify-between items-center pb-4 border-b border-slate-700">
         <div>
-          <h1 className="text-3xl font-bold text-white">Purchase Vouchers</h1>
+          <h1 className="text-3xl font-bold text-white">Sales Vouchers (Invoices)</h1>
           {activeCompanyName && <p className="text-sm text-slate-400 mt-1">{activeCompanyName}</p>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
-        {/* Form Panel - left 7 columns on large screens */}
+        {/* Form Panel */}
         <div className="xl:col-span-7 space-y-4">
           <div className="bg-slate-800 p-6 border border-slate-700 rounded-xl shadow-sm">
             <h2 className="text-xl font-semibold mb-6 text-white">
-              {editingId ? "Edit Purchase Voucher" : "New Purchase Voucher"}
+              {editingId ? "Edit Sales Invoice" : "New Sales Invoice"}
             </h2>
             {error && <div className="p-3 bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded mb-4">{error}</div>}
             {success && <div className="p-3 bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-sm rounded mb-4">{success}</div>}
 
             <form onSubmit={onSubmit} className="space-y-6">
               {/* Header Information */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Supplier *</label>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div className="md:col-span-2">
+                  <label className="text-sm font-medium text-slate-300 block mb-1">Customer *</label>
                   <select
-                    value={supplierId}
-                    onChange={(e) => setSupplierId(e.target.value)}
+                    value={customerId}
+                    onChange={(e) => setCustomerId(e.target.value)}
                     className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   >
-                    <option value="">Select Supplier</option>
-                    {suppliers.map(s => (
-                      <option key={s.id} value={s.id}>{s.supplier_name}</option>
+                    <option value="">Select Customer</option>
+                    {customers.map(c => (
+                      <option key={c.id} value={c.id}>{c.customer_name}</option>
                     ))}
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Voucher Number *</label>
+                  <label className="text-sm font-medium text-slate-300 block mb-1">Invoice Number *</label>
                   <Input
                     value={voucherNumber}
                     onChange={(e) => setVoucherNumber(e.target.value)}
-                    placeholder="PV-XXXX"
+                    placeholder="SV-XXXX"
                     className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Voucher Date *</label>
+                  <label className="text-sm font-medium text-slate-300 block mb-1">Invoice Date *</label>
                   <Input
                     type="date"
                     value={voucherDate}
                     onChange={(e) => setVoucherDate(e.target.value)}
                     className="bg-slate-900 border-slate-700 text-white"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-slate-300 block mb-1">Reference No / PO No</label>
+                  <Input
+                    value={referenceNo}
+                    onChange={(e) => setReferenceNo(e.target.value)}
+                    placeholder="Ref or PO Number"
+                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
                   />
                 </div>
               </div>
@@ -377,7 +390,7 @@ export default function PurchaseVouchersPage() {
                             <option value="">Select Item</option>
                             {itemsList.map(i => (
                               <option key={i.id} value={i.id}>
-                                {i.item_name} {i.sku ? `(${i.sku})` : ""}
+                                {i.item_name} {i.sku ? `(${i.sku})` : ""} - Stock: {i.quantity}
                               </option>
                             ))}
                           </select>
@@ -447,20 +460,20 @@ export default function PurchaseVouchersPage() {
                 </div>
               </div>
 
-              {/* Bottom Section: Remarks & Summary */}
+              {/* Remarks & Calculations */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-700">
-                {/* Remarks & Notes */}
+                {/* Remarks */}
                 <div>
                   <label className="text-sm font-medium text-slate-300 block mb-1">Remarks / Notes</label>
                   <textarea
                     value={remarks}
                     onChange={(e) => setRemarks(e.target.value)}
                     className="w-full h-28 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
-                    placeholder="Enter additional comments or reference details..."
+                    placeholder="Enter customer special instructions or reference details..."
                   />
                 </div>
 
-                {/* Voucher Calculation Summary */}
+                {/* Totals Summary */}
                 <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/80 space-y-3">
                   <div className="flex justify-between text-sm">
                     <span className="text-slate-400">Subtotal (Gross):</span>
@@ -491,7 +504,7 @@ export default function PurchaseVouchersPage() {
               {/* Submit Actions */}
               <div className="pt-4 flex gap-3">
                 <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white border-none">
-                  {editingId ? "Update Voucher" : "Save Voucher"}
+                  {editingId ? "Update Invoice" : "Save Invoice"}
                 </Button>
                 <Button
                   type="button"
@@ -506,17 +519,17 @@ export default function PurchaseVouchersPage() {
           </div>
         </div>
 
-        {/* List Panel - right 5 columns on large screens */}
+        {/* List Panel */}
         <div className="xl:col-span-5">
           <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-sm overflow-x-auto">
             <div className="p-4 border-b border-slate-700 bg-slate-900/30">
-              <h2 className="text-lg font-semibold text-white">Voucher Ledger</h2>
+              <h2 className="text-lg font-semibold text-white">Invoice Log (Ledger)</h2>
             </div>
             
             <table className="w-full text-sm text-left text-slate-300 min-w-[450px]">
               <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs border-b border-slate-700">
                 <tr>
-                  <th className="px-4 py-3 font-medium">Voucher Details</th>
+                  <th className="px-4 py-3 font-medium">Invoice Details</th>
                   <th className="px-4 py-3 font-medium text-right">Net Total</th>
                   <th className="px-4 py-3 font-medium text-right">Actions</th>
                 </tr>
@@ -525,13 +538,13 @@ export default function PurchaseVouchersPage() {
                 {vouchers.length === 0 ? (
                   <tr>
                     <td colSpan="3" className="px-4 py-12 text-center text-slate-500">
-                      No purchase vouchers found.
+                      No sales invoices found.
                     </td>
                   </tr>
                 ) : (
                   vouchers.map(v => {
                     const isCancelled = !v.is_active;
-                    const purchaseDateStr = new Date(v.purchase_date).toLocaleDateString("en-IN", {
+                    const invoiceDateStr = new Date(v.invoice_date).toLocaleDateString("en-IN", {
                       day: "2-digit",
                       month: "short",
                       year: "numeric"
@@ -544,15 +557,17 @@ export default function PurchaseVouchersPage() {
                       >
                         <td className="px-4 py-3">
                           <div className="font-semibold text-slate-100 flex items-center gap-2">
-                            <span>{v.voucher_number}</span>
+                            <span>{v.invoice_number}</span>
                             {isCancelled && (
                               <span className="text-[9px] font-bold uppercase bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded border border-red-500/30">
                                 Cancelled
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-slate-400 mt-0.5">{v.supplier_name}</div>
-                          <div className="text-[10px] text-slate-500 mt-0.5">{purchaseDateStr}</div>
+                          <div className="text-xs text-slate-400 mt-0.5">{v.customer_name}</div>
+                          <div className="text-[10px] text-slate-500 mt-0.5">
+                            {invoiceDateStr} {v.reference_no ? `| Ref: ${v.reference_no}` : ""}
+                          </div>
                         </td>
                         <td className="px-4 py-3 text-right">
                           <div className="font-medium text-slate-200">

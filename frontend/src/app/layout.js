@@ -1,6 +1,6 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from "next/link";
+import Sidebar from "@/components/Sidebar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,42 +25,7 @@ export default function RootLayout({ children }) {
     >
       <body className="min-h-full flex bg-slate-900 text-slate-100">
         {/* Sidebar */}
-        <aside className="w-64 bg-slate-800 border-r border-slate-700 flex-col hidden md:flex">
-          <div className="p-6 border-b border-slate-700">
-            <Link href="/dashboard" className="text-xl font-bold text-white tracking-wider">
-              Smart<span className="text-indigo-400">ERP</span>
-            </Link>
-          </div>
-          <nav className="flex-1 p-4 space-y-2">
-            <Link href="/dashboard" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Dashboard
-            </Link>
-            <Link href="/companies" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Companies
-            </Link>
-            <Link href="/ledgers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Ledgers
-            </Link>
-            <Link href="/groups" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Groups
-            </Link>
-            <Link href="/customers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Customers
-            </Link>
-            <Link href="/suppliers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Suppliers
-            </Link>
-            <Link href="/purchase-vouchers" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Purchase Vouchers
-            </Link>
-            <Link href="/invoices" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Invoices
-            </Link>
-            <Link href="/inventory" className="block px-4 py-2 rounded-md hover:bg-slate-700 text-slate-300 hover:text-white transition-colors">
-              Inventory
-            </Link>
-          </nav>
-        </aside>
+        <Sidebar />
 
         {/* Main Content */}
         <main className="flex-1 flex flex-col min-h-screen overflow-auto">

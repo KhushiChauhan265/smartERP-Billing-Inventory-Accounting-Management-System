@@ -29,6 +29,10 @@ export default function CompaniesPage() {
   };
 
   useEffect(() => {
+    if (!token) {
+      window.location.href = "/login";
+      return;
+    }
     fetchCompanies();
     const active = localStorage.getItem("activeCompanyId");
     if (active) setActiveCompanyId(active);

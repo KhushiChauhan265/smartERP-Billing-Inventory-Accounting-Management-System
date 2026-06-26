@@ -21,6 +21,7 @@ app.use("/api/customers", require("./routes/customers"));
 app.use("/api/suppliers", require("./routes/suppliers"));
 app.use("/api/items", require("./routes/items"));
 app.use("/api/purchase-vouchers", require("./routes/purchaseVouchers"));
+app.use("/api/sales-vouchers", require("./routes/salesVouchers"));
 
 app.use(notFound);
 app.use(errorHandler);

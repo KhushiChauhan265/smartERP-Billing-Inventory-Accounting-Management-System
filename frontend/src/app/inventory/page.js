@@ -25,6 +25,11 @@ export default function InventoryPage() {
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
 
   useEffect(() => {
+    const t = localStorage.getItem("authToken");
+    if (!t) {
+      window.location.href = "/login";
+      return;
+    }
     const active = localStorage.getItem("activeCompanyId");
     if (active) {
       setActiveCompanyId(active);

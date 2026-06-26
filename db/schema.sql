@@ -179,7 +179,11 @@ CREATE TABLE sales_vouchers (
     customer_id UUID REFERENCES customers(id) ON DELETE CASCADE NOT NULL,
     total_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
     gst_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    discount_amount DECIMAL(10, 2) NOT NULL DEFAULT 0,
     gross_total DECIMAL(10, 2) NOT NULL DEFAULT 0,
+    remarks TEXT,
+    is_active BOOLEAN DEFAULT true,
+    reference_no VARCHAR(100),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
