@@ -58,7 +58,7 @@ export default function Sidebar() {
         <Link href="/sales-vouchers" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/sales-vouchers" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
           Sales Vouchers
         </Link>
-        <Link href="/invoices" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/invoices" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
+        <Link href="/billing" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/billing" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
           Invoices
         </Link>
         <Link href="/inventory" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/inventory" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
