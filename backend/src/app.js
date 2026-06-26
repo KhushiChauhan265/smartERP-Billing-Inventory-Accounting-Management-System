@@ -20,6 +20,7 @@ app.use("/api/groups", require("./routes/groups"));
 app.use("/api/customers", require("./routes/customers"));
 app.use("/api/suppliers", require("./routes/suppliers"));
 app.use("/api/items", require("./routes/items"));
+app.use("/api/purchase-vouchers", require("./routes/purchaseVouchers"));
 
 app.use(notFound);
 app.use(errorHandler);
