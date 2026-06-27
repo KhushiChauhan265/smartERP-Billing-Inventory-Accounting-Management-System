@@ -281,8 +281,8 @@ export default function SalesVouchersPage() {
   if (!activeCompanyId) {
     return (
       <div className="p-8 max-w-7xl mx-auto w-full">
-        <h1 className="text-3xl font-bold text-white mb-4">Sales Invoice Management</h1>
-        <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 text-slate-300">
+        <h1 className="text-3xl font-bold text-[#2F2F2F] mb-4">Sales Invoice Management</h1>
+        <div className="bg-[#FFFDF9] p-6 rounded-xl border border-[#EFE7DD] text-[#2F2F2F]/90">
           Please select an active company from Company Management to manage sales invoices.
         </div>
       </div>
@@ -292,32 +292,32 @@ export default function SalesVouchersPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 w-full">
       {/* Header */}
-      <div className="flex justify-between items-center pb-4 border-b border-slate-700">
+      <div className="flex justify-between items-center pb-4 border-b border-[#EFE7DD]">
         <div>
-          <h1 className="text-3xl font-bold text-white">Sales Vouchers (Invoices)</h1>
-          {activeCompanyName && <p className="text-sm text-slate-400 mt-1">{activeCompanyName}</p>}
+          <h1 className="text-3xl font-bold text-[#2F2F2F]">Sales Vouchers (Invoices)</h1>
+          {activeCompanyName && <p className="text-sm text-[#2F2F2F]/70 mt-1">{activeCompanyName}</p>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-8">
         {/* Form Panel */}
         <div className="xl:col-span-7 space-y-4">
-          <div className="bg-slate-800 p-6 border border-slate-700 rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold mb-6 text-white">
+          <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md">
+            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">
               {editingId ? "Edit Sales Invoice" : "New Sales Invoice"}
             </h2>
-            {error && <div className="p-3 bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded mb-4">{error}</div>}
-            {success && <div className="p-3 bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-sm rounded mb-4">{success}</div>}
+            {error && <div className="p-3 bg-red-900/30 border border-red-500/30 text-red-600 text-sm rounded mb-4">{error}</div>}
+            {success && <div className="p-3 bg-emerald-900/30 border border-emerald-500/30 text-green-700 text-sm rounded mb-4">{success}</div>}
 
             <form onSubmit={onSubmit} className="space-y-6">
               {/* Header Information */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div className="md:col-span-2">
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Customer *</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Customer *</label>
                   <select
                     value={customerId}
                     onChange={(e) => setCustomerId(e.target.value)}
-                    className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30"
                   >
                     <option value="">Select Customer</option>
                     {customers.map(c => (
@@ -326,46 +326,46 @@ export default function SalesVouchersPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Invoice Number *</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Invoice Number *</label>
                   <Input
                     value={voucherNumber}
                     onChange={(e) => setVoucherNumber(e.target.value)}
                     placeholder="SV-XXXX"
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Invoice Date *</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Invoice Date *</label>
                   <Input
                     type="date"
                     value={voucherDate}
                     onChange={(e) => setVoucherDate(e.target.value)}
-                    className="bg-slate-900 border-slate-700 text-white"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F]"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Reference No / PO No</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Reference No / PO No</label>
                   <Input
                     value={referenceNo}
                     onChange={(e) => setReferenceNo(e.target.value)}
                     placeholder="Ref or PO Number"
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
               </div>
 
               {/* Items Section */}
               <div className="space-y-4">
-                <div className="flex justify-between items-center border-b border-slate-700 pb-2">
-                  <h3 className="text-lg font-medium text-white">Line Items</h3>
+                <div className="flex justify-between items-center border-b border-[#EFE7DD] pb-2">
+                  <h3 className="text-lg font-medium text-[#2F2F2F]">Line Items</h3>
                   <Button
                     type="button"
                     size="sm"
                     onClick={addItemRow}
-                    className="bg-slate-700 hover:bg-slate-600 text-white border-none"
+                    className="bg-[#E7C9A9] hover:bg-[#FFFDF9] text-[#2F2F2F] border-none"
                   >
                     + Add Row
                   </Button>
@@ -378,14 +378,14 @@ export default function SalesVouchersPage() {
                     const rowTotal = rowSubtotal + rowGst;
 
                     return (
-                      <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end bg-slate-900/40 p-3 rounded-lg border border-slate-700/50">
+                      <div key={index} className="grid grid-cols-1 md:grid-cols-12 gap-3 items-end bg-[#F8F4EE]/40 p-3 rounded-2xl border border-[#EFE7DD]">
                         {/* Item Select */}
                         <div className="md:col-span-4">
-                          <label className="text-xs text-slate-400 block mb-1">Item *</label>
+                          <label className="text-xs text-[#2F2F2F]/70 block mb-1">Item *</label>
                           <select
                             value={item.itemId}
                             onChange={(e) => handleItemChange(index, "itemId", e.target.value)}
-                            className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30"
                           >
                             <option value="">Select Item</option>
                             {itemsList.map(i => (
@@ -398,36 +398,36 @@ export default function SalesVouchersPage() {
 
                         {/* Qty */}
                         <div className="md:col-span-2">
-                          <label className="text-xs text-slate-400 block mb-1">Qty *</label>
+                          <label className="text-xs text-[#2F2F2F]/70 block mb-1">Qty *</label>
                           <Input
                             type="number"
                             min="1"
                             value={item.quantity}
                             onChange={(e) => handleItemChange(index, "quantity", parseInt(e.target.value) || 0)}
-                            className="bg-slate-900 border-slate-700 text-white"
+                            className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F]"
                           />
                         </div>
 
                         {/* Rate */}
                         <div className="md:col-span-2">
-                          <label className="text-xs text-slate-400 block mb-1">Rate (₹) *</label>
+                          <label className="text-xs text-[#2F2F2F]/70 block mb-1">Rate (₹) *</label>
                           <Input
                             type="number"
                             step="0.01"
                             min="0"
                             value={item.rate}
                             onChange={(e) => handleItemChange(index, "rate", parseFloat(e.target.value) || 0)}
-                            className="bg-slate-900 border-slate-700 text-white"
+                            className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F]"
                           />
                         </div>
 
                         {/* GST % */}
                         <div className="md:col-span-2">
-                          <label className="text-xs text-slate-400 block mb-1">GST (%)</label>
+                          <label className="text-xs text-[#2F2F2F]/70 block mb-1">GST (%)</label>
                           <select
                             value={item.gstRate}
                             onChange={(e) => handleItemChange(index, "gstRate", parseFloat(e.target.value) || 0)}
-                            className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                            className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30"
                           >
                             <option value="0">0%</option>
                             <option value="5">5%</option>
@@ -440,8 +440,8 @@ export default function SalesVouchersPage() {
                         {/* Total & Action */}
                         <div className="md:col-span-2 flex items-center justify-between gap-2">
                           <div className="text-right">
-                            <span className="text-[10px] text-slate-500 block">Total</span>
-                            <span className="text-sm font-semibold text-slate-300">₹{rowTotal.toFixed(2)}</span>
+                            <span className="text-[10px] text-[#2F2F2F]/50 block">Total</span>
+                            <span className="text-sm font-semibold text-[#2F2F2F]/90">₹{rowTotal.toFixed(2)}</span>
                           </div>
                           <Button
                             type="button"
@@ -449,7 +449,7 @@ export default function SalesVouchersPage() {
                             size="sm"
                             disabled={voucherItems.length === 1}
                             onClick={() => removeItemRow(index)}
-                            className="bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 hover:border-red-500 p-2 h-9 w-9"
+                            className="bg-red-500 text-white hover:bg-red-600 transition-colors p-2 h-9 w-9 flex items-center justify-center"
                           >
                             ✕
                           </Button>
@@ -461,56 +461,56 @@ export default function SalesVouchersPage() {
               </div>
 
               {/* Remarks & Calculations */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-slate-700">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-[#EFE7DD]">
                 {/* Remarks */}
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Remarks / Notes</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Remarks / Notes</label>
                   <textarea
                     value={remarks}
                     onChange={(e) => setRemarks(e.target.value)}
-                    className="w-full h-28 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 resize-none"
+                    className="w-full h-28 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30 resize-none"
                     placeholder="Enter customer special instructions or reference details..."
                   />
                 </div>
 
                 {/* Totals Summary */}
-                <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-700/80 space-y-3">
+                <div className="bg-[#F8F4EE]/60 p-4 rounded-xl border border-[#EFE7DD] space-y-3">
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">Subtotal (Gross):</span>
-                    <span className="font-medium text-slate-200">₹{subTotal.toFixed(2)}</span>
+                    <span className="text-[#2F2F2F]/70">Subtotal (Gross):</span>
+                    <span className="font-medium text-[#2F2F2F]">₹{subTotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-slate-400">GST (Tax Amount):</span>
-                    <span className="font-medium text-slate-200">₹{gstTotal.toFixed(2)}</span>
+                    <span className="text-[#2F2F2F]/70">GST (Tax Amount):</span>
+                    <span className="font-medium text-[#2F2F2F]">₹{gstTotal.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between items-center text-sm">
-                    <span className="text-slate-400">Discount (₹):</span>
+                    <span className="text-[#2F2F2F]/70">Discount (₹):</span>
                     <Input
                       type="number"
                       step="0.01"
                       min="0"
                       value={discountAmount}
                       onChange={(e) => setDiscountAmount(parseFloat(e.target.value) || 0)}
-                      className="w-28 h-8 bg-slate-950 border-slate-800 text-white text-right"
+                      className="w-28 h-8 bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] text-right"
                     />
                   </div>
-                  <div className="border-t border-slate-700/60 my-2 pt-2 flex justify-between items-center">
-                    <span className="text-base font-semibold text-white">Net Total:</span>
-                    <span className="text-lg font-bold text-indigo-400">₹{netTotal.toFixed(2)}</span>
+                  <div className="border-t border-[#EFE7DD] my-2 pt-2 flex justify-between items-center">
+                    <span className="text-base font-semibold text-[#2F2F2F]">Net Total:</span>
+                    <span className="text-lg font-bold text-[#8B5E3C]">₹{netTotal.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
 
               {/* Submit Actions */}
               <div className="pt-4 flex gap-3">
-                <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white border-none">
+                <Button type="submit" className="flex-1 bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none">
                   {editingId ? "Update Invoice" : "Save Invoice"}
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
                   onClick={resetForm}
-                  className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+                  className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]"
                 >
                   {editingId ? "Cancel Edit" : "Reset Form"}
                 </Button>
@@ -521,13 +521,13 @@ export default function SalesVouchersPage() {
 
         {/* List Panel */}
         <div className="xl:col-span-5">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-sm overflow-x-auto">
-            <div className="p-4 border-b border-slate-700 bg-slate-900/30">
-              <h2 className="text-lg font-semibold text-white">Invoice Log (Ledger)</h2>
+          <div className="bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl shadow-md overflow-x-auto">
+            <div className="p-4 border-b border-[#EFE7DD] bg-[#F8F4EE]/30">
+              <h2 className="text-lg font-semibold text-[#2F2F2F]">Invoice Log (Ledger)</h2>
             </div>
             
-            <table className="w-full text-sm text-left text-slate-300 min-w-[450px]">
-              <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs border-b border-slate-700">
+            <table className="w-full text-sm text-left text-[#2F2F2F]/90 min-w-[450px]">
+              <thead className="bg-[#F8F4EE]/50 text-[#2F2F2F]/70 uppercase text-xs border-b border-[#EFE7DD]">
                 <tr>
                   <th className="px-4 py-3 font-medium">Invoice Details</th>
                   <th className="px-4 py-3 font-medium text-right">Net Total</th>
@@ -537,7 +537,7 @@ export default function SalesVouchersPage() {
               <tbody className="divide-y divide-slate-700/50">
                 {vouchers.length === 0 ? (
                   <tr>
-                    <td colSpan="3" className="px-4 py-12 text-center text-slate-500">
+                    <td colSpan="3" className="px-4 py-12 text-center text-[#2F2F2F]/50">
                       No sales invoices found.
                     </td>
                   </tr>
@@ -553,27 +553,27 @@ export default function SalesVouchersPage() {
                     return (
                       <tr 
                         key={v.id} 
-                        className={`hover:bg-slate-700/30 transition-colors ${isCancelled ? 'opacity-40 bg-red-950/10' : ''}`}
+                        className={`hover:bg-[#E7C9A9] transition-colors ${isCancelled ? 'opacity-40 bg-red-950/10' : ''}`}
                       >
                         <td className="px-4 py-3">
-                          <div className="font-semibold text-slate-100 flex items-center gap-2">
+                          <div className="font-semibold text-[#2F2F2F] flex items-center gap-2">
                             <span>{v.invoice_number}</span>
                             {isCancelled && (
-                              <span className="text-[9px] font-bold uppercase bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded border border-red-500/30">
+                              <span className="text-[9px] font-bold uppercase bg-red-500/20 text-red-600 px-1.5 py-0.5 rounded border border-red-500/30">
                                 Cancelled
                               </span>
                             )}
                           </div>
-                          <div className="text-xs text-slate-400 mt-0.5">{v.customer_name}</div>
-                          <div className="text-[10px] text-slate-500 mt-0.5">
+                          <div className="text-xs text-[#2F2F2F]/70 mt-0.5">{v.customer_name}</div>
+                          <div className="text-[10px] text-[#2F2F2F]/50 mt-0.5">
                             {invoiceDateStr} {v.reference_no ? `| Ref: ${v.reference_no}` : ""}
                           </div>
                         </td>
                         <td className="px-4 py-3 text-right">
-                          <div className="font-medium text-slate-200">
+                          <div className="font-medium text-[#2F2F2F]">
                             ₹{Number(v.gross_total).toFixed(2)}
                           </div>
-                          <div className="text-[10px] text-slate-500">
+                          <div className="text-[10px] text-[#2F2F2F]/50">
                             Tax: ₹{Number(v.gst_amount).toFixed(2)}
                           </div>
                         </td>
@@ -583,7 +583,7 @@ export default function SalesVouchersPage() {
                             size="sm"
                             disabled={isCancelled}
                             onClick={() => handleEdit(v)}
-                            className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white h-7 text-xs px-2"
+                            className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F] h-7 text-xs px-2"
                           >
                             Edit
                           </Button>
@@ -592,7 +592,7 @@ export default function SalesVouchersPage() {
                               variant="destructive"
                               size="sm"
                               onClick={() => handleDelete(v.id)}
-                              className="bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 hover:border-red-500 h-7 text-xs px-2"
+                              className="bg-[#FFFDF9] text-red-600 hover:bg-red-600 hover:text-[#FFFDF9] border border-red-500/20 hover:border-red-500 h-7 text-xs px-2"
                             >
                               Cancel
                             </Button>

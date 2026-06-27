@@ -23,6 +23,7 @@ app.use("/api/items", require("./routes/items"));
 app.use("/api/purchase-vouchers", require("./routes/purchaseVouchers"));
 app.use("/api/sales-vouchers", require("./routes/salesVouchers"));
 app.use("/api/billing", require("./routes/billing"));
+app.use("/api/reports", require("./routes/reports"));
 
 app.use(notFound);
 app.use(errorHandler);

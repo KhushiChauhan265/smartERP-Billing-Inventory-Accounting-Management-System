@@ -152,8 +152,8 @@ export default function InventoryPage() {
   if (!activeCompanyId) {
     return (
       <div className="p-8 max-w-7xl mx-auto w-full">
-        <h1 className="text-3xl font-bold text-white mb-4">Stock Management</h1>
-        <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 text-slate-300">
+        <h1 className="text-3xl font-bold text-[#2F2F2F] mb-4">Stock Management</h1>
+        <div className="bg-[#FFFDF9] p-6 rounded-xl border border-[#EFE7DD] text-[#2F2F2F]/90">
           Please select an active company from Company Management to manage stock items.
         </div>
       </div>
@@ -163,76 +163,76 @@ export default function InventoryPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 w-full">
       {/* Header */}
-      <div className="flex justify-between items-center pb-4 border-b border-slate-700">
+      <div className="flex justify-between items-center pb-4 border-b border-[#EFE7DD]">
         <div>
-          <h1 className="text-3xl font-bold text-white">Stock Management</h1>
-          {activeCompanyName && <p className="text-sm text-slate-400 mt-1">{activeCompanyName}</p>}
+          <h1 className="text-3xl font-bold text-[#2F2F2F]">Stock Management</h1>
+          {activeCompanyName && <p className="text-sm text-[#2F2F2F]/70 mt-1">{activeCompanyName}</p>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Form Panel */}
         <div className="lg:col-span-1 space-y-4">
-          <div className="bg-slate-800 p-6 border border-slate-700 rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold mb-6 text-white">
+          <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md">
+            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">
               {editingId ? "Edit Item" : "Create New Item"}
             </h2>
-            {error && <div className="text-red-400 text-sm mb-4">{error}</div>}
+            {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
             
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-300 block mb-1">Item Name *</label>
+                <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Item Name *</label>
                 <Input
                   {...register("name", { required: true })}
                   placeholder="Intel Core i7 13700K"
-                  className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                  className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">SKU / Code</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">SKU / Code</label>
                   <Input
                     {...register("sku")}
                     placeholder="CPU-I7-13"
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Barcode</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Barcode</label>
                   <Input
                     {...register("barcode")}
                     placeholder="123456789012"
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">HSN / SAC</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">HSN / SAC</label>
                   <Input
                     {...register("hsnSac")}
                     placeholder="84713010"
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Category</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Category</label>
                   <Input
                     {...register("category")}
                     placeholder="Processors"
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Unit</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Unit</label>
                   <select
                     {...register("unitName")}
-                    className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30"
                   >
                     <option value="PCS">PCS</option>
                     <option value="BOX">BOX</option>
@@ -243,10 +243,10 @@ export default function InventoryPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">GST Rate (%)</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">GST Rate (%)</label>
                   <select
                     {...register("gstPercentage")}
-                    className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30"
                   >
                     <option value="0">0%</option>
                     <option value="5">5%</option>
@@ -259,50 +259,50 @@ export default function InventoryPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Purchase Price</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Purchase Price</label>
                   <Input
                     type="number"
                     step="0.01"
                     {...register("purchasePrice")}
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Sale Price</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Sale Price</label>
                   <Input
                     type="number"
                     step="0.01"
                     {...register("sellingPrice")}
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Opening Stock</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Opening Stock</label>
                   <Input
                     type="number"
                     {...register("openingStock")}
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Reorder Level</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Reorder Level</label>
                   <Input
                     type="number"
                     {...register("reorderLevel")}
-                    className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
                   />
                 </div>
               </div>
 
               {editingId && (
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Status</label>
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Status</label>
                   <select
                     {...register("isActive")}
-                    className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                    className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30"
                   >
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
@@ -311,7 +311,7 @@ export default function InventoryPage() {
               )}
 
               <div className="pt-4 flex gap-3">
-                <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white border-none">
+                <Button type="submit" className="flex-1 bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none">
                   {editingId ? "Update" : "Save"}
                 </Button>
                 {editingId && (
@@ -335,7 +335,7 @@ export default function InventoryPage() {
                         isActive: "true"
                       });
                     }}
-                    className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+                    className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]"
                   >
                     Cancel
                   </Button>
@@ -347,9 +347,9 @@ export default function InventoryPage() {
 
         {/* List Panel */}
         <div className="lg:col-span-2">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-sm overflow-x-auto">
-            <table className="w-full text-sm text-left text-slate-300 min-w-[700px]">
-              <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs border-b border-slate-700">
+          <div className="bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl shadow-md overflow-x-auto">
+            <table className="w-full text-sm text-left text-[#2F2F2F]/90 min-w-[700px]">
+              <thead className="bg-[#F8F4EE]/50 text-[#2F2F2F]/70 uppercase text-xs border-b border-[#EFE7DD]">
                 <tr>
                   <th className="px-6 py-4 font-medium">Item Name & SKU</th>
                   <th className="px-6 py-4 font-medium">Category / Unit</th>
@@ -361,7 +361,7 @@ export default function InventoryPage() {
               <tbody className="divide-y divide-slate-700/50">
                 {items.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-slate-500">
+                    <td colSpan="5" className="px-6 py-12 text-center text-[#2F2F2F]/50">
                       No stock items found for this company.
                     </td>
                   </tr>
@@ -369,42 +369,42 @@ export default function InventoryPage() {
                   items.map(item => {
                     const isLowStock = item.quantity <= item.reorder_level;
                     return (
-                      <tr key={item.id} className={`hover:bg-slate-700/30 transition-colors ${!item.is_active ? 'opacity-50' : ''}`}>
+                      <tr key={item.id} className={`hover:bg-[#E7C9A9] transition-colors ${!item.is_active ? 'opacity-50' : ''}`}>
                         <td className="px-6 py-4">
-                          <div className="font-semibold text-slate-100">{item.item_name}</div>
-                          {item.sku && <div className="text-xs text-slate-500 mt-0.5">SKU: {item.sku}</div>}
-                          <div className="text-[10px] text-slate-500 mt-0.5">
+                          <div className="font-semibold text-[#2F2F2F]">{item.item_name}</div>
+                          {item.sku && <div className="text-xs text-[#2F2F2F]/50 mt-0.5">SKU: {item.sku}</div>}
+                          <div className="text-[10px] text-[#2F2F2F]/50 mt-0.5">
                             {item.hsn_sac && <span className="mr-2">HSN: {item.hsn_sac}</span>}
                             {item.barcode && <span>EAN: {item.barcode}</span>}
                           </div>
                           {!item.is_active && (
-                            <span className="inline-block mt-1 text-[10px] font-bold uppercase bg-red-500/20 text-red-400 px-2 py-0.5 rounded border border-red-500/30">
+                            <span className="inline-block mt-1 text-[10px] font-bold uppercase bg-red-500/20 text-red-600 px-2 py-0.5 rounded border border-red-500/30">
                               Inactive
                             </span>
                           )}
                         </td>
                         <td className="px-6 py-4">
-                          <div className="text-slate-300">{item.category || "General"}</div>
-                          <div className="text-xs text-slate-500 mt-0.5">{item.unit_name}</div>
+                          <div className="text-[#2F2F2F]/90">{item.category || "General"}</div>
+                          <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{item.unit_name}</div>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <div className="text-slate-200">
+                          <div className="text-[#2F2F2F]">
                             ₹{Number(item.purchase_price).toFixed(2)} / ₹{Number(item.selling_price).toFixed(2)}
                           </div>
-                          <div className="text-xs text-slate-500 mt-0.5">GST: {item.gst_percentage}%</div>
+                          <div className="text-xs text-[#2F2F2F]/50 mt-0.5">GST: {item.gst_percentage}%</div>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <div className={`font-semibold ${isLowStock && item.is_active ? 'text-amber-400' : 'text-slate-100'}`}>
+                          <div className={`font-semibold ${isLowStock && item.is_active ? 'text-[#C68642]' : 'text-[#2F2F2F]'}`}>
                             {item.quantity} {item.unit_name}
                           </div>
-                          <div className="text-xs text-slate-500 mt-0.5">Reorder at: {item.reorder_level}</div>
+                          <div className="text-xs text-[#2F2F2F]/50 mt-0.5">Reorder at: {item.reorder_level}</div>
                         </td>
                         <td className="px-6 py-4 text-right space-x-3">
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={() => handleEdit(item)}
-                            className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+                            className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]"
                           >
                             Edit
                           </Button>
@@ -413,7 +413,7 @@ export default function InventoryPage() {
                               variant="destructive"
                               size="sm"
                               onClick={() => handleDelete(item.id)}
-                              className="bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 hover:border-red-500"
+                              className="bg-red-600 text-white hover:bg-red-700 transition-colors"
                             >
                               Delete
                             </Button>

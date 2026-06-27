@@ -160,8 +160,8 @@ export default function BillingPage() {
   if (!activeCompanyId) {
     return (
       <div className="p-8 max-w-7xl mx-auto w-full">
-        <h1 className="text-3xl font-bold text-white mb-4">Billing System</h1>
-        <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 text-slate-300">
+        <h1 className="text-3xl font-bold text-[#2F2F2F] mb-4">Billing System</h1>
+        <div className="bg-[#FFFDF9] p-6 rounded-xl border border-[#EFE7DD] text-[#2F2F2F]/90">
           Please select an active company from Company Management to access the Billing System.
         </div>
       </div>
@@ -171,23 +171,23 @@ export default function BillingPage() {
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 w-full print:p-0 print:m-0">
       {/* Header (Hidden when printing) */}
-      <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-4 border-b border-slate-700 gap-4 print:hidden">
+      <div className="flex flex-col md:flex-row justify-between items-start md:items-center pb-4 border-b border-[#EFE7DD] gap-4 print:hidden">
         <div>
-          <h1 className="text-3xl font-bold text-white">Billing Dashboard</h1>
-          {activeCompanyName && <p className="text-sm text-slate-400 mt-1">{activeCompanyName}</p>}
+          <h1 className="text-3xl font-bold text-[#2F2F2F]">Billing Dashboard</h1>
+          {activeCompanyName && <p className="text-sm text-[#2F2F2F]/70 mt-1">{activeCompanyName}</p>}
         </div>
         
         {/* Sales / Purchase Tab Selector */}
-        <div className="flex bg-slate-800 p-1 rounded-lg border border-slate-700">
+        <div className="flex bg-[#FFFDF9] p-1 rounded-2xl border border-[#EFE7DD]">
           <button
             onClick={() => setActiveTab("sales")}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === "sales" ? "bg-indigo-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+            className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${activeTab === "sales" ? "bg-gradient-to-r from-[#C68642] to-[#8B5E3C] text-[#FFFDF9] shadow" : "text-[#2F2F2F]/70 hover:text-[#2F2F2F]"}`}
           >
             Sales Invoices
           </button>
           <button
             onClick={() => setActiveTab("purchase")}
-            className={`px-4 py-2 text-sm font-medium rounded-md transition-all ${activeTab === "purchase" ? "bg-indigo-600 text-white shadow" : "text-slate-400 hover:text-white"}`}
+            className={`px-4 py-2 text-sm font-medium rounded-full transition-all ${activeTab === "purchase" ? "bg-gradient-to-r from-[#C68642] to-[#8B5E3C] text-[#FFFDF9] shadow" : "text-[#2F2F2F]/70 hover:text-[#2F2F2F]"}`}
           >
             Purchase Bills
           </button>
@@ -195,37 +195,37 @@ export default function BillingPage() {
       </div>
 
       {/* Filter panel (Hidden when printing) */}
-      <div className="bg-slate-800 p-6 border border-slate-700 rounded-xl shadow-sm print:hidden">
+      <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md print:hidden">
         <form onSubmit={handleApplyFilters} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
           {/* Date Picker Range */}
           <div>
-            <label className="text-xs font-medium text-slate-300 block mb-1">From Date</label>
+            <label className="text-xs font-medium text-[#2F2F2F]/90 block mb-1">From Date</label>
             <Input
               type="date"
               value={fromDate}
               onChange={(e) => setFromDate(e.target.value)}
-              className="bg-slate-900 border-slate-700 text-white h-10"
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] h-10"
             />
           </div>
           <div>
-            <label className="text-xs font-medium text-slate-300 block mb-1">To Date</label>
+            <label className="text-xs font-medium text-[#2F2F2F]/90 block mb-1">To Date</label>
             <Input
               type="date"
               value={toDate}
               onChange={(e) => setToDate(e.target.value)}
-              className="bg-slate-900 border-slate-700 text-white h-10"
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] h-10"
             />
           </div>
 
           {/* Party Dropdown */}
           <div>
-            <label className="text-xs font-medium text-slate-300 block mb-1">
+            <label className="text-xs font-medium text-[#2F2F2F]/90 block mb-1">
               {activeTab === "sales" ? "Customer" : "Supplier"}
             </label>
             <select
               value={partyId}
               onChange={(e) => setPartyId(e.target.value)}
-              className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
+              className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30 text-sm"
             >
               <option value="">All Parties</option>
               {parties.map(p => (
@@ -238,11 +238,11 @@ export default function BillingPage() {
 
           {/* Status Dropdown */}
           <div>
-            <label className="text-xs font-medium text-slate-300 block mb-1">Status</label>
+            <label className="text-xs font-medium text-[#2F2F2F]/90 block mb-1">Status</label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value)}
-              className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500 text-sm"
+              className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30 text-sm"
             >
               <option value="ALL">All Bills</option>
               <option value="ACTIVE">Active Only</option>
@@ -256,11 +256,11 @@ export default function BillingPage() {
               type="button"
               variant="outline"
               onClick={handleResetFilters}
-              className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+              className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]"
             >
               Reset
             </Button>
-            <Button type="submit" className="bg-indigo-600 hover:bg-indigo-500 text-white border-none">
+            <Button type="submit" className="bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none">
               Apply Filters
             </Button>
           </div>
@@ -268,10 +268,10 @@ export default function BillingPage() {
       </div>
 
       {/* Main Table List (Hidden when printing) */}
-      <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-sm overflow-hidden print:hidden">
+      <div className="bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl shadow-md overflow-hidden print:hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-sm text-left text-slate-300 min-w-[600px]">
-            <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs border-b border-slate-700">
+          <table className="w-full text-sm text-left text-[#2F2F2F]/90 min-w-[600px]">
+            <thead className="bg-[#F8F4EE]/50 text-[#2F2F2F]/70 uppercase text-xs border-b border-[#EFE7DD]">
               <tr>
                 <th className="px-6 py-4 font-medium">Date</th>
                 <th className="px-6 py-4 font-medium">Invoice / Bill No</th>
@@ -285,7 +285,7 @@ export default function BillingPage() {
             <tbody className="divide-y divide-slate-700/50">
               {vouchers.length === 0 ? (
                 <tr>
-                  <td colSpan="7" className="px-6 py-12 text-center text-slate-500">
+                  <td colSpan="7" className="px-6 py-12 text-center text-[#2F2F2F]/50">
                     No bills or invoices matching the filters.
                   </td>
                 </tr>
@@ -301,20 +301,20 @@ export default function BillingPage() {
                   return (
                     <tr
                       key={v.id}
-                      className={`hover:bg-slate-700/30 transition-colors ${isCancelled ? "opacity-40 bg-red-950/5" : ""}`}
+                      className={`hover:bg-[#E7C9A9] transition-colors ${isCancelled ? "opacity-40 bg-red-950/5" : ""}`}
                     >
-                      <td className="px-6 py-4 font-medium text-slate-200">{billDate}</td>
-                      <td className="px-6 py-4 font-semibold text-slate-100">
+                      <td className="px-6 py-4 font-medium text-[#2F2F2F]">{billDate}</td>
+                      <td className="px-6 py-4 font-semibold text-[#2F2F2F]">
                         {v.invoice_number || v.voucher_number}
-                        {v.reference_no && <span className="text-[10px] text-slate-500 font-normal block">Ref: {v.reference_no}</span>}
+                        {v.reference_no && <span className="text-[10px] text-[#2F2F2F]/50 font-normal block">Ref: {v.reference_no}</span>}
                       </td>
-                      <td className="px-6 py-4 text-slate-300">{v.customer_name || v.supplier_name}</td>
+                      <td className="px-6 py-4 text-[#2F2F2F]/90">{v.customer_name || v.supplier_name}</td>
                       <td className="px-6 py-4 text-right">₹{Number(v.gst_amount).toFixed(2)}</td>
-                      <td className="px-6 py-4 text-right font-bold text-slate-100">
+                      <td className="px-6 py-4 text-right font-bold text-[#2F2F2F]">
                         ₹{Number(v.gross_total).toFixed(2)}
                       </td>
                       <td className="px-6 py-4 text-center">
-                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold border ${!isCancelled ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" : "bg-red-500/10 text-red-400 border-red-500/20"}`}>
+                        <span className={`inline-block px-2.5 py-0.5 rounded-full text-xs font-semibold border ${!isCancelled ? "bg-emerald-500/10 text-green-700 border-emerald-500/20" : "bg-[#FFFDF9] text-red-600 border-red-500/20"}`}>
                           {!isCancelled ? "Active" : "Cancelled"}
                         </span>
                       </td>
@@ -323,7 +323,7 @@ export default function BillingPage() {
                           variant="outline"
                           size="sm"
                           onClick={() => handleViewDetails(v.id)}
-                          className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white"
+                          className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]"
                         >
                           View Bill
                         </Button>
@@ -339,31 +339,31 @@ export default function BillingPage() {
 
       {/* 8. DETAIL INVOICE MODAL (VISIBLE FOR SCREEN & PRINTING WHEN OPEN) */}
       {isModalOpen && (
-        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 print:absolute print:inset-0 print:bg-white print:backdrop-blur-none print:text-black">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl max-w-4xl w-full p-8 space-y-6 shadow-2xl relative print:bg-white print:border-none print:shadow-none print:p-0 print:text-black">
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-black/40 backdrop-blur-sm flex items-center justify-center p-4 print:absolute print:inset-0 print:bg-white print:backdrop-blur-none print:text-black">
+          <div className="bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl max-w-4xl w-full p-8 space-y-6 shadow-2xl relative print:bg-white print:border-none print:shadow-none print:p-0 print:text-black">
             
             {/* Modal Close & Actions (Hidden when printing) */}
-            <div className="flex justify-between items-center pb-4 border-b border-slate-700/60 print:hidden">
-              <h3 className="text-xl font-bold text-white">
+            <div className="flex justify-between items-center pb-4 border-b border-[#EFE7DD] print:hidden">
+              <h3 className="text-xl font-bold text-[#2F2F2F]">
                 {activeTab === "sales" ? "Tax Invoice Details" : "Purchase Bill Details"}
               </h3>
               <div className="flex gap-2">
                 <Button
                   onClick={handlePrint}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white border-none text-xs"
+                  className="bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none text-xs"
                 >
                   Print Invoice
                 </Button>
                 <Button
                   onClick={handleDownloadPDF}
-                  className="bg-emerald-600 hover:bg-emerald-500 text-white border-none text-xs"
+                  className="bg-[#C68642] hover:bg-[#8B5E3C] text-[#FFFDF9] border-none text-xs"
                 >
                   Download PDF
                 </Button>
                 <Button
                   variant="outline"
                   onClick={() => setIsModalOpen(false)}
-                  className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white text-xs"
+                  className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F] text-xs"
                 >
                   Close
                 </Button>
@@ -371,7 +371,7 @@ export default function BillingPage() {
             </div>
 
             {modalLoading ? (
-              <div className="py-20 text-center text-slate-400">Loading invoice details...</div>
+              <div className="py-20 text-center text-[#2F2F2F]/70">Loading invoice details...</div>
             ) : (
               detailVoucher && (
                 <div className="space-y-6 print:text-black">
@@ -395,23 +395,23 @@ export default function BillingPage() {
                     }
                   `}</style>
 
-                  <div className="print-bill-container p-1 rounded-lg">
+                  <div className="print-bill-container p-1 rounded-2xl">
                     {/* 1. Header (Company Info & Document title) */}
-                    <div className="flex flex-col md:flex-row justify-between items-start border-b border-slate-700/60 pb-6 print:border-slate-300">
+                    <div className="flex flex-col md:flex-row justify-between items-start border-b border-[#EFE7DD] pb-6 print:border-slate-300">
                       <div className="space-y-1">
-                        <h4 className="text-2xl font-bold text-white print:text-black">{activeCompanyName}</h4>
-                        {detailVoucher.company_state && <p className="text-sm text-slate-400 print:text-slate-600">State: {detailVoucher.company_state}</p>}
-                        {detailVoucher.company_gst && <p className="text-sm font-semibold text-indigo-400 print:text-black">GSTIN: {detailVoucher.company_gst}</p>}
+                        <h4 className="text-2xl font-bold text-[#2F2F2F] print:text-black">{activeCompanyName}</h4>
+                        {detailVoucher.company_state && <p className="text-sm text-[#2F2F2F]/70 print:text-slate-600">State: {detailVoucher.company_state}</p>}
+                        {detailVoucher.company_gst && <p className="text-sm font-semibold text-[#8B5E3C] print:text-black">GSTIN: {detailVoucher.company_gst}</p>}
                       </div>
                       <div className="text-right space-y-1 mt-4 md:mt-0">
-                        <h4 className="text-xl font-bold text-indigo-400 print:text-black uppercase">
+                        <h4 className="text-xl font-bold text-[#8B5E3C] print:text-black uppercase">
                           {activeTab === "sales" ? "Tax Invoice" : "Purchase Bill"}
                         </h4>
-                        <p className="text-sm text-slate-300 print:text-black">
+                        <p className="text-sm text-[#2F2F2F]/90 print:text-black">
                           <span className="font-semibold">{activeTab === "sales" ? "Invoice No: " : "Bill No: "}</span>
                           {detailVoucher.invoice_number || detailVoucher.voucher_number}
                         </p>
-                        <p className="text-sm text-slate-300 print:text-black">
+                        <p className="text-sm text-[#2F2F2F]/90 print:text-black">
                           <span className="font-semibold">Date: </span>
                           {new Date(detailVoucher.invoice_date || detailVoucher.purchase_date).toLocaleDateString("en-IN", {
                             day: "2-digit",
@@ -420,13 +420,13 @@ export default function BillingPage() {
                           })}
                         </p>
                         {detailVoucher.reference_no && (
-                          <p className="text-sm text-slate-300 print:text-black">
+                          <p className="text-sm text-[#2F2F2F]/90 print:text-black">
                             <span className="font-semibold">Ref/PO No: </span>
                             {detailVoucher.reference_no}
                           </p>
                         )}
                         {!detailVoucher.is_active && (
-                          <div className="text-red-400 font-bold border border-red-500/30 bg-red-500/10 px-2 py-0.5 rounded text-xs inline-block uppercase print:border-red-500 print:text-red-600">
+                          <div className="text-red-600 font-bold border border-red-500/30 bg-[#FFFDF9] px-2 py-0.5 rounded text-xs inline-block uppercase print:border-red-500 print:text-red-600">
                             Cancelled
                           </div>
                         )}
@@ -434,22 +434,22 @@ export default function BillingPage() {
                     </div>
 
                     {/* 2. Client / Supplier details */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-b border-slate-700/60 pb-6 print:border-slate-300 print:grid-cols-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-6 border-b border-[#EFE7DD] pb-6 print:border-slate-300 print:grid-cols-2">
                       <div className="space-y-1">
-                        <span className="text-xs font-semibold text-slate-500 uppercase block">
+                        <span className="text-xs font-semibold text-[#2F2F2F]/50 uppercase block">
                           {activeTab === "sales" ? "Billed To" : "Supplier / Vendor"}
                         </span>
-                        <h5 className="text-base font-bold text-white print:text-black">
+                        <h5 className="text-base font-bold text-[#2F2F2F] print:text-black">
                           {detailVoucher.customer_name || detailVoucher.supplier_name}
                         </h5>
-                        <p className="text-sm text-slate-300 print:text-slate-700">{detailVoucher.party_address || "Address not provided."}</p>
+                        <p className="text-sm text-[#2F2F2F]/90 print:text-slate-700">{detailVoucher.party_address || "Address not provided."}</p>
                         {detailVoucher.party_gstin && (
-                          <p className="text-sm font-medium text-slate-300 print:text-black">
+                          <p className="text-sm font-medium text-[#2F2F2F]/90 print:text-black">
                             GSTIN: <span className="font-semibold">{detailVoucher.party_gstin}</span>
                           </p>
                         )}
                         {detailVoucher.party_mobile && (
-                          <p className="text-sm text-slate-400 print:text-slate-600">Contact: {detailVoucher.party_mobile}</p>
+                          <p className="text-sm text-[#2F2F2F]/70 print:text-slate-600">Contact: {detailVoucher.party_mobile}</p>
                         )}
                       </div>
                     </div>
@@ -458,7 +458,7 @@ export default function BillingPage() {
                     <div className="pt-6">
                       <table className="w-full text-left text-sm print:text-black">
                         <thead>
-                          <tr className="border-b border-slate-700 print:border-slate-400 text-slate-400 print:text-slate-800 font-semibold">
+                          <tr className="border-b border-[#EFE7DD] print:border-slate-400 text-[#2F2F2F]/70 print:text-slate-800 font-semibold">
                             <th className="py-2">Item Description</th>
                             <th className="py-2 text-right">Qty</th>
                             <th className="py-2 text-right">Rate</th>
@@ -471,10 +471,10 @@ export default function BillingPage() {
                           {detailItems.map((item, index) => {
                             const lineTotal = Number(item.amount) + Number(item.gst_amount);
                             return (
-                              <tr key={index} className="text-slate-300 print:text-black">
+                              <tr key={index} className="text-[#2F2F2F]/90 print:text-black">
                                 <td className="py-3">
                                   <div className="font-medium">{item.item_name}</div>
-                                  {item.sku && <div className="text-xs text-slate-500 print:text-slate-600">SKU: {item.sku}</div>}
+                                  {item.sku && <div className="text-xs text-[#2F2F2F]/50 print:text-slate-600">SKU: {item.sku}</div>}
                                 </td>
                                 <td className="py-3 text-right">{item.quantity}</td>
                                 <td className="py-3 text-right">₹{Number(item.rate).toFixed(2)}</td>
@@ -489,13 +489,13 @@ export default function BillingPage() {
                     </div>
 
                     {/* 4. Calculation summary */}
-                    <div className="flex flex-col md:flex-row justify-between items-start pt-6 border-t border-slate-700 print:border-slate-400 mt-6 gap-6">
+                    <div className="flex flex-col md:flex-row justify-between items-start pt-6 border-t border-[#EFE7DD] print:border-slate-400 mt-6 gap-6">
                       {/* Left: Remarks */}
                       <div className="max-w-md">
                         {detailVoucher.remarks && (
                           <div className="space-y-1">
-                            <span className="text-xs font-semibold text-slate-500 uppercase block">Remarks / Special Notes</span>
-                            <p className="text-sm text-slate-400 print:text-slate-700">{detailVoucher.remarks}</p>
+                            <span className="text-xs font-semibold text-[#2F2F2F]/50 uppercase block">Remarks / Special Notes</span>
+                            <p className="text-sm text-[#2F2F2F]/70 print:text-slate-700">{detailVoucher.remarks}</p>
                           </div>
                         )}
                       </div>
@@ -503,27 +503,27 @@ export default function BillingPage() {
                       {/* Right: Calculations */}
                       <div className="w-full md:w-80 space-y-2.5 text-sm print:text-black">
                         <div className="flex justify-between">
-                          <span className="text-slate-400 print:text-slate-700">Subtotal (Gross):</span>
-                          <span className="font-medium text-slate-200 print:text-black">₹{Number(detailVoucher.total_amount).toFixed(2)}</span>
+                          <span className="text-[#2F2F2F]/70 print:text-slate-700">Subtotal (Gross):</span>
+                          <span className="font-medium text-[#2F2F2F] print:text-black">₹{Number(detailVoucher.total_amount).toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-400 print:text-slate-700">GST Amount (Tax):</span>
-                          <span className="font-medium text-slate-200 print:text-black">₹{Number(detailVoucher.gst_amount).toFixed(2)}</span>
+                          <span className="text-[#2F2F2F]/70 print:text-slate-700">GST Amount (Tax):</span>
+                          <span className="font-medium text-[#2F2F2F] print:text-black">₹{Number(detailVoucher.gst_amount).toFixed(2)}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span className="text-slate-400 print:text-slate-700">Discount:</span>
-                          <span className="font-medium text-slate-200 print:text-black">₹{Number(detailVoucher.discount_amount).toFixed(2)}</span>
+                          <span className="text-[#2F2F2F]/70 print:text-slate-700">Discount:</span>
+                          <span className="font-medium text-[#2F2F2F] print:text-black">₹{Number(detailVoucher.discount_amount).toFixed(2)}</span>
                         </div>
-                        <div className="border-t border-slate-700 print:border-slate-400 my-2 pt-2 flex justify-between items-center">
-                          <span className="text-base font-semibold text-white print:text-black">Grand Total:</span>
-                          <span className="text-lg font-bold text-indigo-400 print:text-black">₹{Number(detailVoucher.gross_total).toFixed(2)}</span>
+                        <div className="border-t border-[#EFE7DD] print:border-slate-400 my-2 pt-2 flex justify-between items-center">
+                          <span className="text-base font-semibold text-[#2F2F2F] print:text-black">Grand Total:</span>
+                          <span className="text-lg font-bold text-[#8B5E3C] print:text-black">₹{Number(detailVoucher.gross_total).toFixed(2)}</span>
                         </div>
                       </div>
                     </div>
                   </div>
 
                   {/* Computer generated disclaimer */}
-                  <div className="text-center text-[10px] text-slate-500 pt-8 border-t border-slate-800 print:text-slate-500">
+                  <div className="text-center text-[10px] text-[#2F2F2F]/50 pt-8 border-t border-[#EFE7DD] print:text-[#2F2F2F]/50">
                     This is a computer-generated invoice and requires no physical signature.
                   </div>
                 </div>

@@ -69,71 +69,71 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-slate-900 px-4">
-      <div className="w-full max-w-md bg-slate-800 border border-slate-700 rounded-xl p-8 shadow-lg space-y-6">
+    <div className="flex items-center justify-center min-h-screen bg-[#F8F4EE] px-4">
+      <div className="w-full max-w-md bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl p-8 shadow-lg space-y-6">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-white tracking-wider">
-            Smart<span className="text-indigo-400">ERP</span>
+          <h1 className="text-3xl font-bold text-[#2F2F2F] tracking-wider">
+            Smart<span className="text-[#8B5E3C]">ERP</span>
           </h1>
-          <p className="text-sm text-slate-400 mt-2">Create a new account</p>
+          <p className="text-sm text-[#2F2F2F]/70 mt-2">Create a new account</p>
         </div>
 
         {error && (
-          <div className="p-3 bg-red-900/30 border border-red-500/30 text-red-400 text-sm rounded text-center">
+          <div className="p-3 bg-red-900/30 border border-red-500/30 text-red-600 text-sm rounded text-center">
             {error}
           </div>
         )}
 
         {success && (
-          <div className="p-3 bg-emerald-900/30 border border-emerald-500/30 text-emerald-400 text-sm rounded text-center">
+          <div className="p-3 bg-emerald-900/30 border border-emerald-500/30 text-green-700 text-sm rounded text-center">
             {success}
           </div>
         )}
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <label className="text-sm font-medium text-slate-300 block mb-1">Full Name</label>
+            <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Full Name</label>
             <Input
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="John Doe"
-              className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
               required
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-slate-300 block mb-1">Email Address</label>
+            <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Email Address</label>
             <Input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@example.com"
-              className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
               required
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-slate-300 block mb-1">Password</label>
+            <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Password</label>
             <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Min 6 characters"
-              className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
               required
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-slate-300 block mb-1">Confirm Password</label>
+            <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Confirm Password</label>
             <Input
               type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Re-enter password"
-              className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500"
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
               required
             />
           </div>
@@ -141,15 +141,15 @@ export default function RegisterPage() {
           <Button
             type="submit"
             disabled={loading}
-            className="w-full bg-indigo-600 hover:bg-indigo-500 text-white border-none py-2.5 rounded-md font-medium transition-colors"
+            className="w-full bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none py-2.5 rounded-full font-medium transition-colors"
           >
             {loading ? "Registering..." : "Register"}
           </Button>
         </form>
 
-        <div className="text-center text-sm text-slate-400 pt-2 border-t border-slate-700/60">
+        <div className="text-center text-sm text-[#2F2F2F]/70 pt-2 border-t border-[#EFE7DD]">
           Already have an account?{" "}
-          <Link href="/login" className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors">
+          <Link href="/login" className="text-[#8B5E3C] hover:text-indigo-300 font-medium transition-colors">
             Login Here
           </Link>
         </div>

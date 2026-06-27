@@ -6,10 +6,12 @@ import { usePathname } from "next/navigation";
 export default function Sidebar() {
   const pathname = usePathname();
   const [token, setToken] = useState(null);
+  const [userFullName, setUserFullName] = useState("");
 
   useEffect(() => {
     // Check if token exists to handle login/logout states
     setToken(localStorage.getItem("authToken"));
+    setUserFullName(localStorage.getItem("userFullName") || "User");
   }, [pathname]);
 
   // Hide sidebar on login and register pages
@@ -26,52 +28,61 @@ export default function Sidebar() {
     window.location.href = "/login";
   };
 
+  const navItems = [
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Companies", href: "/companies" },
+    { name: "Ledgers", href: "/ledgers" },
+    { name: "Groups", href: "/groups" },
+    { name: "Customers", href: "/customers" },
+    { name: "Suppliers", href: "/suppliers" },
+    { name: "Purchase Vouchers", href: "/purchase-vouchers" },
+    { name: "Sales Vouchers", href: "/sales-vouchers" },
+    { name: "Invoices", href: "/billing" },
+    { name: "Reports", href: "/reports" },
+    { name: "Inventory", href: "/inventory" },
+  ];
+
   return (
-    <aside className="w-64 bg-slate-800 border-r border-slate-700 flex flex-col hidden md:flex min-h-screen">
-      <div className="p-6 border-b border-slate-700">
-        <Link href="/dashboard" className="text-xl font-bold text-white tracking-wider">
-          Smart<span className="text-indigo-400">ERP</span>
+    <aside className="hidden md:flex flex-col justify-between h-[90vh] mt-8 ml-6 w-64 bg-[#FFFDF9] border border-[#EFE7DD] rounded-2xl shadow-md sticky top-8">
+      {/* Top Section */}
+      <div className="p-6">
+        <Link href="/dashboard" className="text-xl font-bold text-[#2F2F2F] tracking-wide block">
+          Smart<span className="text-[#C68642]">ERP</span>
         </Link>
       </div>
-      <nav className="flex-1 p-4 space-y-2">
-        <Link href="/dashboard" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/dashboard" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Dashboard
-        </Link>
-        <Link href="/companies" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/companies" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Companies
-        </Link>
-        <Link href="/ledgers" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/ledgers" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Ledgers
-        </Link>
-        <Link href="/groups" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/groups" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Groups
-        </Link>
-        <Link href="/customers" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/customers" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Customers
-        </Link>
-        <Link href="/suppliers" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/suppliers" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Suppliers
-        </Link>
-        <Link href="/purchase-vouchers" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/purchase-vouchers" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Purchase Vouchers
-        </Link>
-        <Link href="/sales-vouchers" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/sales-vouchers" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Sales Vouchers
-        </Link>
-        <Link href="/billing" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/billing" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Invoices
-        </Link>
-        <Link href="/inventory" className={`block px-4 py-2 rounded-md transition-colors ${pathname === "/inventory" ? "bg-indigo-600 text-white font-semibold" : "text-slate-300 hover:bg-slate-700 hover:text-white"}`}>
-          Inventory
-        </Link>
+
+      {/* Middle Section - Navigation */}
+      <nav className="flex-1 px-4 space-y-1.5 overflow-y-auto scrollbar-hide pb-4">
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.name}
+              href={item.href}
+              className={`block px-3 py-2 rounded-xl text-sm font-medium transition-all duration-150 ${
+                isActive
+                  ? "bg-[#C68642] text-[#FFFDF9] shadow-sm hover:scale-[1.02]"
+                  : "text-[#2F2F2F] hover:bg-[#E7C9A9] hover:text-[#2F2F2F]"
+              }`}
+            >
+              {item.name}
+            </Link>
+          );
+        })}
       </nav>
+
+      {/* Bottom Section - Profile & Logout */}
       {token && (
-        <div className="p-4 border-t border-slate-700">
+        <div className="p-4 border-t border-[#EFE7DD] m-2 rounded-xl bg-[#F8F4EE]">
+          <div className="text-xs text-[#2F2F2F]/60 mb-1">Logged in as</div>
+          <div className="text-sm font-semibold text-[#8B5E3C] mb-3 truncate">
+            {userFullName}
+          </div>
           <button
             onClick={handleLogout}
-            className="w-full px-4 py-2 text-sm font-medium text-red-400 hover:text-white bg-red-500/10 hover:bg-red-500 rounded-md border border-red-500/20 hover:border-red-500 transition-all"
+            className="w-full px-3 py-2 text-xs font-medium text-[#8B5E3C] hover:text-[#FFFDF9] hover:bg-[#8B5E3C] rounded-lg border border-[#8B5E3C]/30 transition-all duration-150"
           >
-            Logout
+            Log Out
           </button>
         </div>
       )}

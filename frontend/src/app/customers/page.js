@@ -127,8 +127,8 @@ export default function CustomersPage() {
   if (!activeCompanyId) {
     return (
       <div className="p-8 max-w-7xl mx-auto w-full">
-        <h1 className="text-3xl font-bold text-white mb-4">Customer Ledger Management</h1>
-        <div className="bg-slate-800 p-6 rounded-xl border border-slate-700 text-slate-300">
+        <h1 className="text-3xl font-bold text-[#2F2F2F] mb-4">Customer Ledger Management</h1>
+        <div className="bg-[#FFFDF9] p-6 rounded-xl border border-[#EFE7DD] text-[#2F2F2F]/90">
           Please select an active company from Company Management to manage customers.
         </div>
       </div>
@@ -137,57 +137,57 @@ export default function CustomersPage() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 w-full">
-      <div className="flex justify-between items-center pb-4 border-b border-slate-700">
-        <h1 className="text-3xl font-bold text-white">Customer Ledger Management</h1>
+      <div className="flex justify-between items-center pb-4 border-b border-[#EFE7DD]">
+        <h1 className="text-3xl font-bold text-[#2F2F2F]">Customer Ledger Management</h1>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-4">
-          <div className="bg-slate-800 p-6 border border-slate-700 rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold mb-6 text-white">{editingId ? "Edit Customer" : "Create New Customer"}</h2>
-            {error && <div className="text-red-400 text-sm mb-4">{error}</div>}
+          <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md">
+            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">{editingId ? "Edit Customer" : "Create New Customer"}</h2>
+            {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
             
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
               <div>
-                <label className="text-sm font-medium text-slate-300 block mb-1">Name *</label>
-                <Input {...register("name", { required: true })} placeholder="Khushi Traders" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Name *</label>
+                <Input {...register("name", { required: true })} placeholder="Khushi Traders" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
               </div>
               
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Code</label>
-                  <Input {...register("code")} placeholder="CUST001" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Code</label>
+                  <Input {...register("code")} placeholder="CUST001" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Contact Person</label>
-                  <Input {...register("contactPerson")} placeholder="Khushi" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Contact Person</label>
+                  <Input {...register("contactPerson")} placeholder="Khushi" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Phone</label>
-                  <Input {...register("mobileNumber")} placeholder="98765..." className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Phone</label>
+                  <Input {...register("mobileNumber")} placeholder="98765..." className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Email</label>
-                  <Input {...register("email")} placeholder="k@example.com" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Email</label>
+                  <Input {...register("email")} placeholder="k@example.com" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-slate-300 block mb-1">Address</label>
-                <textarea {...register("address")} className="w-full h-20 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500" placeholder="Full address" />
+                <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Address</label>
+                <textarea {...register("address")} className="w-full h-20 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30" placeholder="Full address" />
               </div>
 
               <div>
-                <label className="text-sm font-medium text-slate-300 block mb-1">GSTIN</label>
-                <Input {...register("gstin")} placeholder="27ABCDE1234F1Z5" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">GSTIN</label>
+                <Input {...register("gstin")} placeholder="27ABCDE1234F1Z5" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
               </div>
 
               <div>
-                <label className="text-sm font-medium text-slate-300 block mb-1">Group</label>
-                <select {...register("groupId")} className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Group</label>
+                <select {...register("groupId")} className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30">
                   <option value="">None</option>
                   {groups.map(g => (
                     <option key={g.id} value={g.id}>{g.name}</option>
@@ -197,12 +197,12 @@ export default function CustomersPage() {
 
               <div className="flex gap-4">
                 <div className="flex-1">
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Opening Balance</label>
-                  <Input type="number" step="0.01" {...register("openingBalance")} className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Opening Balance</label>
+                  <Input type="number" step="0.01" {...register("openingBalance")} className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
                 <div className="flex-1">
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Dr/Cr</label>
-                  <select {...register("openingBalanceType")} className="w-full h-10 px-3 py-2 rounded-md bg-slate-900 border border-slate-700 text-white focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Dr/Cr</label>
+                  <select {...register("openingBalanceType")} className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30">
                     <option value="DEBIT">DEBIT (Dr)</option>
                     <option value="CREDIT">CREDIT (Cr)</option>
                   </select>
@@ -210,9 +210,9 @@ export default function CustomersPage() {
               </div>
 
               <div className="pt-4 flex gap-3">
-                <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white border-none">{editingId ? "Update" : "Save"}</Button>
+                <Button type="submit" className="flex-1 bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none">{editingId ? "Update" : "Save"}</Button>
                 {editingId && (
-                  <Button type="button" variant="outline" onClick={() => {setEditingId(null); reset({ openingBalanceType: "DEBIT", openingBalance: 0 });}} className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white">Cancel</Button>
+                  <Button type="button" variant="outline" onClick={() => {setEditingId(null); reset({ openingBalanceType: "DEBIT", openingBalance: 0 });}} className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]">Cancel</Button>
                 )}
               </div>
             </form>
@@ -220,9 +220,9 @@ export default function CustomersPage() {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-sm overflow-x-auto">
-            <table className="w-full text-sm text-left text-slate-300 min-w-[600px]">
-              <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs border-b border-slate-700">
+          <div className="bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl shadow-md overflow-x-auto">
+            <table className="w-full text-sm text-left text-[#2F2F2F]/90 min-w-[600px]">
+              <thead className="bg-[#F8F4EE]/50 text-[#2F2F2F]/70 uppercase text-xs border-b border-[#EFE7DD]">
                 <tr>
                   <th className="px-6 py-4 font-medium">Customer Details</th>
                   <th className="px-6 py-4 font-medium">Group</th>
@@ -234,32 +234,32 @@ export default function CustomersPage() {
               <tbody className="divide-y divide-slate-700/50">
                 {customers.length === 0 ? (
                   <tr>
-                    <td colSpan="5" className="px-6 py-12 text-center text-slate-500">No customers found for this company.</td>
+                    <td colSpan="5" className="px-6 py-12 text-center text-[#2F2F2F]/50">No customers found for this company.</td>
                   </tr>
                 ) : (
                   customers.map(c => (
-                    <tr key={c.id} className={`hover:bg-slate-700/30 transition-colors ${!c.is_active ? 'opacity-50' : ''}`}>
+                    <tr key={c.id} className={`hover:bg-[#E7C9A9] transition-colors ${!c.is_active ? 'opacity-50' : ''}`}>
                       <td className="px-6 py-4">
-                        <div className="font-semibold text-slate-100">{c.customer_name}</div>
-                        {c.code && <div className="text-xs text-slate-500 mt-0.5">{c.code}</div>}
-                        {c.gstin && <div className="text-xs text-indigo-400 mt-0.5">GST: {c.gstin}</div>}
-                        {!c.is_active && <span className="inline-block mt-1 text-[10px] font-bold uppercase bg-red-500/20 text-red-400 px-2 py-0.5 rounded border border-red-500/30">Inactive</span>}
+                        <div className="font-semibold text-[#2F2F2F]">{c.customer_name}</div>
+                        {c.code && <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{c.code}</div>}
+                        {c.gstin && <div className="text-xs text-[#8B5E3C] mt-0.5">GST: {c.gstin}</div>}
+                        {!c.is_active && <span className="inline-block mt-1 text-[10px] font-bold uppercase bg-red-500/20 text-red-600 px-2 py-0.5 rounded border border-red-500/30">Inactive</span>}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-slate-300">{c.group_name || 'None'}</div>
+                        <div className="text-[#2F2F2F]/90">{c.group_name || 'None'}</div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-slate-300">{c.contact_person || '-'}</div>
-                        <div className="text-xs text-slate-500 mt-0.5">{c.mobile_number || '-'}</div>
+                        <div className="text-[#2F2F2F]/90">{c.contact_person || '-'}</div>
+                        <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{c.mobile_number || '-'}</div>
                       </td>
                       <td className="px-6 py-4 text-right">
-                        <div className="font-medium text-slate-200">{Number(c.opening_balance).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
-                        <div className="text-xs text-slate-500 mt-0.5">{c.opening_balance_type === 'DEBIT' ? 'Dr' : 'Cr'}</div>
+                        <div className="font-medium text-[#2F2F2F]">{Number(c.opening_balance).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
+                        <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{c.opening_balance_type === 'DEBIT' ? 'Dr' : 'Cr'}</div>
                       </td>
                       <td className="px-6 py-4 text-right space-x-3">
-                        <Button variant="outline" size="sm" onClick={() => handleEdit(c)} className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white">Edit</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleEdit(c)} className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]">Edit</Button>
                         {c.is_active && (
-                          <Button variant="destructive" size="sm" onClick={() => handleDelete(c.id)} className="bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 hover:border-red-500">Delete</Button>
+                          <Button variant="destructive" size="sm" onClick={() => handleDelete(c.id)} className="bg-red-600 text-white hover:bg-red-700 transition-colors">Delete</Button>
                         )}
                       </td>
                     </tr>

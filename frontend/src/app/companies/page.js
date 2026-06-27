@@ -102,57 +102,57 @@ export default function CompaniesPage() {
 
   return (
     <div className="p-8 max-w-7xl mx-auto space-y-8 w-full">
-      <div className="flex justify-between items-center pb-4 border-b border-slate-700">
-        <h1 className="text-3xl font-bold text-white">Company Management</h1>
-        <div className="text-sm font-medium text-slate-300">
-          Active Company: {activeCompanyName ? <span className="text-indigo-400 font-bold">{activeCompanyName}</span> : <span className="text-slate-500">None Selected</span>}
+      <div className="flex justify-between items-center pb-4 border-b border-[#EFE7DD]">
+        <h1 className="text-3xl font-bold text-[#2F2F2F]">Company Management</h1>
+        <div className="text-sm font-medium text-[#2F2F2F]/90">
+          Active Company: {activeCompanyName ? <span className="text-[#8B5E3C] font-bold">{activeCompanyName}</span> : <span className="text-[#2F2F2F]/50">None Selected</span>}
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-4">
-          <div className="bg-slate-800 p-6 border border-slate-700 rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold mb-6 text-white">{editingId ? "Edit Company" : "Create New Company"}</h2>
-            {error && <div className="text-red-400 text-sm mb-4">{error}</div>}
+          <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md">
+            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">{editingId ? "Edit Company" : "Create New Company"}</h2>
+            {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
             
-            <div className="text-sm text-slate-400 mb-6">
+            <div className="text-sm text-[#2F2F2F]/70 mb-6">
               Manage your companies here. You can add as many as you need.
             </div>
               <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Company Name *</label>
-                  <Input {...register("company_name", { required: true })} placeholder="My Business" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Company Name *</label>
+                  <Input {...register("company_name", { required: true })} placeholder="My Business" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">GST Number</label>
-                  <Input {...register("gst_number")} placeholder="22AAAAA0000A1Z5" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">GST Number</label>
+                  <Input {...register("gst_number")} placeholder="22AAAAA0000A1Z5" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">State</label>
-                  <Input {...register("state")} placeholder="Maharashtra" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">State</label>
+                  <Input {...register("state")} placeholder="Maharashtra" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Address</label>
-                  <Input {...register("address")} placeholder="123 Main St" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Address</label>
+                  <Input {...register("address")} placeholder="123 Main St" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-slate-300 block mb-1">Contact Number</label>
-                  <Input {...register("contact_number")} placeholder="9876543210" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Contact Number</label>
+                  <Input {...register("contact_number")} placeholder="9876543210" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                 </div>
                 <div className="flex gap-4">
                   <div className="flex-1">
-                    <label className="text-sm font-medium text-slate-300 block mb-1">FY Start</label>
-                    <Input {...register("financial_year_start")} placeholder="01-04-2023" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                    <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">FY Start</label>
+                    <Input {...register("financial_year_start")} placeholder="01-04-2023" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                   </div>
                   <div className="flex-1">
-                    <label className="text-sm font-medium text-slate-300 block mb-1">FY End</label>
-                    <Input {...register("financial_year_end")} placeholder="31-03-2024" className="bg-slate-900 border-slate-700 text-white placeholder:text-slate-500" />
+                    <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">FY End</label>
+                    <Input {...register("financial_year_end")} placeholder="31-03-2024" className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50" />
                   </div>
                 </div>
                 <div className="pt-4 flex gap-3">
-                  <Button type="submit" className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white border-none">{editingId ? "Update" : "Save"}</Button>
+                  <Button type="submit" className="flex-1 bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none">{editingId ? "Update" : "Save"}</Button>
                   {editingId && (
-                    <Button type="button" variant="outline" onClick={() => {setEditingId(null); reset();}} className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white">Cancel</Button>
+                    <Button type="button" variant="outline" onClick={() => {setEditingId(null); reset();}} className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]">Cancel</Button>
                   )}
                 </div>
               </form>
@@ -160,9 +160,9 @@ export default function CompaniesPage() {
         </div>
 
         <div className="lg:col-span-2">
-          <div className="bg-slate-800 border border-slate-700 rounded-xl shadow-sm overflow-hidden">
-            <table className="w-full text-sm text-left text-slate-300">
-              <thead className="bg-slate-900/50 text-slate-400 uppercase text-xs border-b border-slate-700">
+          <div className="bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl shadow-md overflow-hidden">
+            <table className="w-full text-sm text-left text-[#2F2F2F]/90">
+              <thead className="bg-[#F8F4EE]/50 text-[#2F2F2F]/70 uppercase text-xs border-b border-[#EFE7DD]">
                 <tr>
                   <th className="px-6 py-4 font-medium">Company Name</th>
                   <th className="px-6 py-4 font-medium">GST / State</th>
@@ -172,23 +172,23 @@ export default function CompaniesPage() {
               <tbody className="divide-y divide-slate-700/50">
                 {companies.length === 0 ? (
                   <tr>
-                    <td colSpan="3" className="px-6 py-12 text-center text-slate-500">No companies found. Create one to get started.</td>
+                    <td colSpan="3" className="px-6 py-12 text-center text-[#2F2F2F]/50">No companies found. Create one to get started.</td>
                   </tr>
                 ) : (
                   companies.map(comp => (
-                    <tr key={comp.id} className="hover:bg-slate-700/30 transition-colors">
+                    <tr key={comp.id} className="hover:bg-[#E7C9A9] transition-colors">
                       <td className="px-6 py-4">
-                        <div className="font-semibold text-slate-100">{comp.company_name}</div>
-                        {activeCompanyId === comp.id && <span className="inline-block mt-1 text-[10px] font-bold tracking-wider uppercase bg-indigo-500/20 text-indigo-400 px-2 py-0.5 rounded border border-indigo-500/30">Active</span>}
+                        <div className="font-semibold text-[#2F2F2F]">{comp.company_name}</div>
+                        {activeCompanyId === comp.id && <span className="inline-block mt-1 text-[10px] font-bold tracking-wider uppercase bg-[#C68642]/20 text-[#8B5E3C] px-2 py-0.5 rounded border border-[#C68642]/30">Active</span>}
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-slate-300">{comp.gst_number || "No GST"}</div>
-                        <div className="text-xs text-slate-500 mt-0.5">{comp.state || "No State"}</div>
+                        <div className="text-[#2F2F2F]/90">{comp.gst_number || "No GST"}</div>
+                        <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{comp.state || "No State"}</div>
                       </td>
                       <td className="px-6 py-4 text-right space-x-3">
-                        <Button variant="outline" size="sm" onClick={() => handleSelectActive(comp.id)} className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white">Select</Button>
-                        <Button variant="outline" size="sm" onClick={() => handleEdit(comp)} className="border-slate-600 text-slate-300 hover:bg-slate-700 hover:text-white">Edit</Button>
-                        <Button variant="destructive" size="sm" onClick={() => handleDelete(comp.id)} className="bg-red-500/10 text-red-400 hover:bg-red-500 hover:text-white border border-red-500/20 hover:border-red-500">Delete</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleSelectActive(comp.id)} className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]">Select</Button>
+                        <Button variant="outline" size="sm" onClick={() => handleEdit(comp)} className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]">Edit</Button>
+                        <Button variant="destructive" size="sm" onClick={() => handleDelete(comp.id)} className="bg-red-600 text-white hover:bg-red-700 transition-colors">Delete</Button>
                       </td>
                     </tr>
                   ))
