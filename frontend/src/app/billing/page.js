@@ -1,9 +1,12 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { usePageShortcuts } from "@/hooks/usePageShortcuts";
 
 export default function BillingPage() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("sales"); // "sales" or "purchase"
   const [vouchers, setVouchers] = useState([]);
   const [parties, setParties] = useState([]); // customers or suppliers
@@ -15,6 +18,8 @@ export default function BillingPage() {
   const [toDate, setToDate] = useState("");
   const [partyId, setPartyId] = useState("");
   const [status, setStatus] = useState("ALL"); // "ALL", "ACTIVE", "CANCELLED"
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchInputRef = useRef(null);
 
   // Details Modal states
   const [detailVoucher, setDetailVoucher] = useState(null);
@@ -25,6 +30,24 @@ export default function BillingPage() {
   const [error, setError] = useState("");
   const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
+
+  const filteredVouchers = vouchers.filter(v => {
+    const term = searchTerm.toLowerCase();
+    const invoiceNum = (v.invoice_number || v.voucher_number || "").toLowerCase();
+    const reference = (v.reference_no || "").toLowerCase();
+    const partyName = activeTab === "sales" 
+      ? (v.customer_name || "").toLowerCase()
+      : (v.supplier_name || "").toLowerCase();
+    return invoiceNum.includes(term) || reference.includes(term) || partyName.includes(term);
+  });
+
+  usePageShortcuts([
+    { key: "b", ctrlKey: true, handler: () => router.push("/sales-vouchers") },
+    { key: "p", ctrlKey: true, handler: () => { if (isModalOpen && detailVoucher) handlePrint(); } },
+    { key: "p", ctrlKey: true, shiftKey: true, handler: () => { if (isModalOpen && detailVoucher) handleDownloadPDF(); } },
+    { key: "m", ctrlKey: true, handler: () => { if (isModalOpen && detailVoucher) alert("Email Invoice not implemented yet"); } },
+    { key: "f", ctrlKey: true, handler: () => searchInputRef.current?.focus(), preventDefault: true },
+  ]);
 
   // Check auth and load company
   useEffect(() => {
@@ -102,6 +125,7 @@ export default function BillingPage() {
     setToDate("");
     setPartyId("");
     setStatus("ALL");
+    setSearchTerm("");
     // Directly trigger load with cleared filters
     setTimeout(() => {
       loadBills();
@@ -196,7 +220,7 @@ export default function BillingPage() {
 
       {/* Filter panel (Hidden when printing) */}
       <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md print:hidden">
-        <form onSubmit={handleApplyFilters} className="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+        <form onSubmit={handleApplyFilters} className="grid grid-cols-1 md:grid-cols-5 gap-4 items-end">
           {/* Date Picker Range */}
           <div>
             <label className="text-xs font-medium text-[#2F2F2F]/90 block mb-1">From Date</label>
@@ -250,8 +274,21 @@ export default function BillingPage() {
             </select>
           </div>
 
+          {/* Text Search */}
+          <div>
+            <label className="text-xs font-medium text-[#2F2F2F]/90 block mb-1">Search (Ctrl+F)</label>
+            <Input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Invoice No, Ref or Party..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] h-10 placeholder:text-[#2F2F2F]/40"
+            />
+          </div>
+
           {/* Action Buttons */}
-          <div className="md:col-span-4 flex justify-end gap-3 pt-2">
+          <div className="md:col-span-5 flex justify-end gap-3 pt-2">
             <Button
               type="button"
               variant="outline"
@@ -283,14 +320,14 @@ export default function BillingPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-700/50">
-              {vouchers.length === 0 ? (
+              {filteredVouchers.length === 0 ? (
                 <tr>
                   <td colSpan="7" className="px-6 py-12 text-center text-[#2F2F2F]/50">
                     No bills or invoices matching the filters.
                   </td>
                 </tr>
               ) : (
-                vouchers.map(v => {
+                filteredVouchers.map(v => {
                   const billDate = new Date(v.invoice_date || v.purchase_date).toLocaleDateString("en-IN", {
                     day: "2-digit",
                     month: "short",
@@ -347,25 +384,15 @@ export default function BillingPage() {
               <h3 className="text-xl font-bold text-[#2F2F2F]">
                 {activeTab === "sales" ? "Tax Invoice Details" : "Purchase Bill Details"}
               </h3>
-              <div className="flex gap-2">
-                <Button
-                  onClick={handlePrint}
-                  className="bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none text-xs"
-                >
-                  Print Invoice
+              <div className="flex items-center gap-3 no-print">
+                <Button onClick={handlePrint} className="bg-gradient-to-r from-[#C68642] to-[#8B5E3C] text-[#FFFDF9] hover:bg-[#C68642] border-none rounded-full shadow-sm text-sm font-medium px-4">
+                  Print (Ctrl+P)
                 </Button>
-                <Button
-                  onClick={handleDownloadPDF}
-                  className="bg-[#C68642] hover:bg-[#8B5E3C] text-[#FFFDF9] border-none text-xs"
-                >
-                  Download PDF
+                <Button onClick={handleDownloadPDF} className="bg-gradient-to-r from-[#C68642] to-[#8B5E3C] text-[#FFFDF9] hover:bg-[#C68642] border-none rounded-full shadow-sm text-sm font-medium px-4">
+                  Download PDF (Ctrl+Shift+P)
                 </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => setIsModalOpen(false)}
-                  className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F] text-xs"
-                >
-                  Close
+                <Button onClick={() => setIsModalOpen(false)} variant="outline" className="border-[#EFE7DD] text-[#2F2F2F] hover:bg-[#E7C9A9] rounded-full text-sm font-medium px-4">
+                  Close (ESC)
                 </Button>
               </div>
             </div>

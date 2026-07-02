@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { usePageShortcuts } from "@/hooks/usePageShortcuts";
 
 export default function ReportsPage() {
   const [activeTab, setActiveTab] = useState("sales"); // "sales", "purchase", "gst", "stock"
@@ -29,6 +30,15 @@ export default function ReportsPage() {
 
   const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
+
+  usePageShortcuts([
+    { key: "b", altKey: true, handler: () => alert("Balance Sheet not fully implemented yet") },
+    { key: "p", altKey: true, handler: () => alert("Profit & Loss not fully implemented yet") },
+    { key: "t", altKey: true, handler: () => alert("Trial Balance not fully implemented yet") },
+    { key: "c", altKey: true, handler: () => alert("Cash Flow not fully implemented yet") },
+    { key: "r", altKey: true, handler: () => setActiveTab("stock") },
+    { key: "x", altKey: true, handler: () => setActiveTab("gst") },
+  ]);
 
   // Check Auth & Company Context
   useEffect(() => {

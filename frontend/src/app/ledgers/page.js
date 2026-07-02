@@ -3,18 +3,28 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { usePageShortcuts } from "@/hooks/usePageShortcuts";
 
 export default function LedgersPage() {
   const [ledgers, setLedgers] = useState([]);
   const [activeCompanyId, setActiveCompanyId] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
-  const { register, handleSubmit, reset, setValue } = useForm({
+  const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
+  const { register, handleSubmit, reset, setValue, setFocus } = useForm({
     defaultValues: { type: "ASSET", openingBalanceType: "DEBIT", openingBalance: 0 }
   });
   
   const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
+
+  usePageShortcuts([
+    { key: "l", altKey: true, allowInInput: true, handler: () => { setEditingId(null); reset({ type: "ASSET", openingBalanceType: "DEBIT", openingBalance: 0 }); setFocus("name"); } },
+    { key: "a", altKey: true, allowInInput: true, handler: () => { if (selectedRowIndex >= 0 && ledgers[selectedRowIndex]) { handleEdit(ledgers[selectedRowIndex]); } else { alert("Please select a ledger row using Arrow keys first."); } } },
+    { key: "ArrowDown", handler: () => setSelectedRowIndex(prev => Math.min(prev + 1, ledgers.length - 1)), preventDefault: true },
+    { key: "ArrowUp", handler: () => setSelectedRowIndex(prev => Math.max(prev - 1, 0)), preventDefault: true },
+    { key: "Enter", handler: () => { if (selectedRowIndex >= 0 && ledgers[selectedRowIndex]) handleEdit(ledgers[selectedRowIndex]); }, preventDefault: true }
+  ]);
 
   useEffect(() => {
     const active = localStorage.getItem("activeCompanyId");
@@ -121,7 +131,7 @@ export default function LedgersPage() {
         {/* Left Panel: Form */}
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md">
-            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">{editingId ? "Edit Ledger" : "Create New Ledger"}</h2>
+            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">{editingId ? "Edit Ledger (Alt+A)" : "Create New Ledger (Alt+L)"}</h2>
             {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
             
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -193,29 +203,32 @@ export default function LedgersPage() {
                     <td colSpan="4" className="px-6 py-12 text-center text-[#2F2F2F]/50">No ledgers found for this company.</td>
                   </tr>
                 ) : (
-                  ledgers.map(ledger => (
-                    <tr key={ledger.id} className={`hover:bg-[#E7C9A9] transition-colors ${!ledger.is_active ? 'opacity-50' : ''}`}>
-                      <td className="px-6 py-4">
-                        <div className="font-semibold text-[#2F2F2F]">{ledger.name}</div>
-                        {ledger.code && <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{ledger.code}</div>}
-                        {!ledger.is_active && <span className="inline-block mt-1 text-[10px] font-bold uppercase bg-red-500/20 text-red-600 px-2 py-0.5 rounded border border-red-500/30">Inactive</span>}
-                      </td>
-                      <td className="px-6 py-4">
-                        <div className="text-[#2F2F2F]/90">{ledger.type}</div>
-                        <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{ledger.group_name || "No Group"}</div>
-                      </td>
-                      <td className="px-6 py-4 text-right">
-                        <div className="font-medium text-[#2F2F2F]">{Number(ledger.opening_balance).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
-                        <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{ledger.opening_balance_type === 'DEBIT' ? 'Dr' : 'Cr'}</div>
-                      </td>
-                      <td className="px-6 py-4 text-right space-x-3">
-                        <Button variant="outline" size="sm" onClick={() => handleEdit(ledger)} className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]">Edit</Button>
-                        {ledger.is_active && (
-                          <Button variant="destructive" size="sm" onClick={() => handleDelete(ledger.id)} className="bg-red-600 text-white hover:bg-red-700 transition-colors">Delete</Button>
-                        )}
-                      </td>
-                    </tr>
-                  ))
+                  ledgers.map((ledger, index) => {
+                    const isSelected = index === selectedRowIndex;
+                    return (
+                      <tr key={ledger.id} className={`transition-colors ${!ledger.is_active ? 'opacity-50' : ''} ${isSelected ? 'bg-[#EFE7DD]' : 'hover:bg-[#E7C9A9]'}`}>
+                        <td className="px-6 py-4">
+                          <div className="font-semibold text-[#2F2F2F]">{ledger.name}</div>
+                          {ledger.code && <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{ledger.code}</div>}
+                          {!ledger.is_active && <span className="inline-block mt-1 text-[10px] font-bold uppercase bg-red-500/20 text-red-600 px-2 py-0.5 rounded border border-red-500/30">Inactive</span>}
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="text-[#2F2F2F]/90">{ledger.type}</div>
+                          <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{ledger.group_name || "No Group"}</div>
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <div className="font-medium text-[#2F2F2F]">{Number(ledger.opening_balance).toLocaleString('en-IN', { minimumFractionDigits: 2 })}</div>
+                          <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{ledger.opening_balance_type === 'DEBIT' ? 'Dr' : 'Cr'}</div>
+                        </td>
+                        <td className="px-6 py-4 text-right space-x-3">
+                          <Button variant="outline" size="sm" onClick={() => handleEdit(ledger)} className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]">Edit</Button>
+                          {ledger.is_active && (
+                            <Button variant="destructive" size="sm" onClick={() => handleDelete(ledger.id)} className="bg-red-600 text-white hover:bg-red-700 transition-colors">Delete</Button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })
                 )}
               </tbody>
             </table>

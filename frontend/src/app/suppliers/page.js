@@ -1,21 +1,43 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { usePageShortcuts } from "@/hooks/usePageShortcuts";
 
 export default function SuppliersPage() {
+  const router = useRouter();
   const [suppliers, setSuppliers] = useState([]);
   const [groups, setGroups] = useState([]);
   const [activeCompanyId, setActiveCompanyId] = useState(null);
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
-  const { register, handleSubmit, reset, setValue } = useForm({
+  const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchInputRef = useRef(null);
+
+  const { register, handleSubmit, reset, setValue, setFocus } = useForm({
     defaultValues: { openingBalanceType: "CREDIT", openingBalance: 0, groupId: "" }
   });
   
   const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
+
+  const filteredSuppliers = suppliers.filter(s =>
+    s.supplier_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (s.code && s.code.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (s.contact_person && s.contact_person.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  usePageShortcuts([
+    { key: "s", ctrlKey: true, handler: () => { setEditingId(null); reset(); setFocus("name"); } },
+    { key: "s", ctrlKey: true, shiftKey: true, handler: () => router.push("/ledgers") },
+    { key: "f", ctrlKey: true, handler: () => searchInputRef.current?.focus(), preventDefault: true },
+    { key: "ArrowDown", handler: () => setSelectedRowIndex(prev => Math.min(prev + 1, filteredSuppliers.length - 1)), preventDefault: true },
+    { key: "ArrowUp", handler: () => setSelectedRowIndex(prev => Math.max(prev - 1, 0)), preventDefault: true },
+    { key: "Enter", handler: () => { if (selectedRowIndex >= 0 && filteredSuppliers[selectedRowIndex]) handleEdit(filteredSuppliers[selectedRowIndex]); }, preventDefault: true }
+  ]);
 
   useEffect(() => {
     const t = localStorage.getItem("authToken");
@@ -144,7 +166,7 @@ export default function SuppliersPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md">
-            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">{editingId ? "Edit Supplier" : "Create New Supplier"}</h2>
+            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">{editingId ? "Edit Supplier" : "Create New Supplier (Ctrl+S)"}</h2>
             {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
             
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
@@ -219,7 +241,21 @@ export default function SuppliersPage() {
           </div>
         </div>
 
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-4">
+          <div className="bg-[#FFFDF9] p-4 border border-[#EFE7DD] rounded-xl shadow-md flex items-center gap-2">
+            <span className="text-sm font-medium text-[#2F2F2F]">Search:</span>
+            <Input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search suppliers by name, code or contact... (Ctrl+F)"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setSelectedRowIndex(-1);
+              }}
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50 h-9"
+            />
+          </div>
           <div className="bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl shadow-md overflow-x-auto">
             <table className="w-full text-sm text-left text-[#2F2F2F]/90 min-w-[600px]">
               <thead className="bg-[#F8F4EE]/50 text-[#2F2F2F]/70 uppercase text-xs border-b border-[#EFE7DD]">
@@ -232,13 +268,13 @@ export default function SuppliersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700/50">
-                {suppliers.length === 0 ? (
+                {filteredSuppliers.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="px-6 py-12 text-center text-[#2F2F2F]/50">No suppliers found for this company.</td>
                   </tr>
                 ) : (
-                  suppliers.map(s => (
-                    <tr key={s.id} className={`hover:bg-[#E7C9A9] transition-colors ${!s.is_active ? 'opacity-50' : ''}`}>
+                  filteredSuppliers.map((s, index) => (
+                    <tr key={s.id} className={`transition-colors ${!s.is_active ? 'opacity-50' : ''} ${index === selectedRowIndex ? 'bg-[#EFE7DD]' : 'hover:bg-[#E7C9A9]'}`}>
                       <td className="px-6 py-4">
                         <div className="font-semibold text-[#2F2F2F]">{s.supplier_name}</div>
                         {s.code && <div className="text-xs text-[#2F2F2F]/50 mt-0.5">{s.code}</div>}

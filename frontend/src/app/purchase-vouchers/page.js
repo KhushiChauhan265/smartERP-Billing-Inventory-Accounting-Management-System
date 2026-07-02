@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { usePageShortcuts } from "@/hooks/usePageShortcuts";
 
 export default function PurchaseVouchersPage() {
   const [vouchers, setVouchers] = useState([]);
@@ -26,6 +27,10 @@ export default function PurchaseVouchersPage() {
 
   const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
+
+  usePageShortcuts([
+    { key: "s", ctrlKey: true, handler: (e) => onSubmit(e), allowInInput: true }
+  ]);
 
   // Load active company
   useEffect(() => {
@@ -491,7 +496,7 @@ export default function PurchaseVouchersPage() {
               {/* Submit Actions */}
               <div className="pt-4 flex gap-3">
                 <Button type="submit" className="flex-1 bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none">
-                  {editingId ? "Update Voucher" : "Save Voucher"}
+                  {editingId ? "Update Voucher (Ctrl+S)" : "Save Voucher (Ctrl+S)"}
                 </Button>
                 <Button
                   type="button"

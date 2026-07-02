@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { usePageShortcuts } from "@/hooks/usePageShortcuts";
 
 export default function GroupsPage() {
   const [groups, setGroups] = useState([]);
@@ -10,12 +11,16 @@ export default function GroupsPage() {
   const [activeCompanyName, setActiveCompanyName] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
-  const { register, handleSubmit, reset, setValue } = useForm({
+  const { register, handleSubmit, reset, setValue, setFocus } = useForm({
     defaultValues: { type: "ASSET", isPrimary: false }
   });
 
   const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
+
+  usePageShortcuts([
+    { key: "g", altKey: true, handler: () => { setEditingId(null); reset({ type: "ASSET", isPrimary: false, parentGroupId: "" }); setFocus("name"); } }
+  ]);
 
   useEffect(() => {
     const t = localStorage.getItem("authToken");
@@ -145,7 +150,7 @@ export default function GroupsPage() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md">
-            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">{editingId ? "Edit Group" : "Create New Group"}</h2>
+            <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">{editingId ? "Edit Group" : "Create New Group (Alt+G)"}</h2>
             {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
             
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

@@ -1,16 +1,23 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { usePageShortcuts } from "@/hooks/usePageShortcuts";
 
 export default function InventoryPage() {
+  const router = useRouter();
   const [items, setItems] = useState([]);
   const [activeCompanyId, setActiveCompanyId] = useState(null);
   const [activeCompanyName, setActiveCompanyName] = useState("");
   const [editingId, setEditingId] = useState(null);
   const [error, setError] = useState("");
-  const { register, handleSubmit, reset, setValue } = useForm({
+  const [selectedRowIndex, setSelectedRowIndex] = useState(-1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchInputRef = useRef(null);
+
+  const { register, handleSubmit, reset, setValue, setFocus } = useForm({
     defaultValues: {
       unitName: "PCS",
       purchasePrice: 0,
@@ -23,6 +30,27 @@ export default function InventoryPage() {
 
   const token = typeof window !== "undefined" ? localStorage.getItem("authToken") : null;
   const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3001";
+
+  const filteredItems = items.filter(item =>
+    item.item_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (item.sku && item.sku.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (item.category && item.category.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
+  usePageShortcuts([
+    { key: "i", ctrlKey: true, handler: () => router.push("/inventory") },
+    { key: "n", ctrlKey: true, handler: () => { setEditingId(null); reset(); setFocus("itemName"); } },
+    { key: "s", altKey: true, handler: () => { setEditingId(null); reset(); setFocus("itemName"); } },
+    { key: "u", altKey: true, handler: () => setFocus("unitName") },
+    { key: "e", ctrlKey: true, handler: () => { if (selectedRowIndex >= 0 && filteredItems[selectedRowIndex]) handleEdit(filteredItems[selectedRowIndex]); } },
+    { key: "d", ctrlKey: true, handler: () => { if (selectedRowIndex >= 0 && filteredItems[selectedRowIndex]) handleDelete(filteredItems[selectedRowIndex].id); } },
+    { key: "t", ctrlKey: true, handler: () => alert("Stock Transfer not fully implemented yet") },
+    { key: "r", ctrlKey: true, handler: () => router.push("/reports") },
+    { key: "f", ctrlKey: true, handler: () => searchInputRef.current?.focus(), preventDefault: true },
+    { key: "ArrowDown", handler: () => setSelectedRowIndex(prev => Math.min(prev + 1, filteredItems.length - 1)), preventDefault: true },
+    { key: "ArrowUp", handler: () => setSelectedRowIndex(prev => Math.max(prev - 1, 0)), preventDefault: true },
+    { key: "Enter", handler: () => { if (selectedRowIndex >= 0 && filteredItems[selectedRowIndex]) handleEdit(filteredItems[selectedRowIndex]); }, preventDefault: true }
+  ]);
 
   useEffect(() => {
     const t = localStorage.getItem("authToken");
@@ -175,7 +203,7 @@ export default function InventoryPage() {
         <div className="lg:col-span-1 space-y-4">
           <div className="bg-[#FFFDF9] p-6 border border-[#EFE7DD] rounded-xl shadow-md">
             <h2 className="text-xl font-semibold mb-6 text-[#2F2F2F]">
-              {editingId ? "Edit Item" : "Create New Item"}
+              {editingId ? "Edit Item (Ctrl+E)" : "Create New Item (Ctrl+N / Alt+S)"}
             </h2>
             {error && <div className="text-red-600 text-sm mb-4">{error}</div>}
             
@@ -255,90 +283,23 @@ export default function InventoryPage() {
                     <option value="28">28%</option>
                   </select>
                 </div>
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Purchase Price</label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    {...register("purchasePrice")}
-                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Sale Price</label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    {...register("sellingPrice")}
-                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
-                  />
+                <div className="flex-1">
+                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Barcode</label>
+                  <Input {...register("barcode")} className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F]" />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Opening Stock</label>
-                  <Input
-                    type="number"
-                    {...register("openingStock")}
-                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
-                  />
-                </div>
-                <div>
-                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Reorder Level</label>
-                  <Input
-                    type="number"
-                    {...register("reorderLevel")}
-                    className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50"
-                  />
-                </div>
+              <div className="flex items-center gap-2">
+                 <input type="checkbox" id="isActive" {...register("isActive")} className="rounded border-[#EFE7DD] text-[#C68642] focus:ring-[#C68642]/30" />
+                 <label htmlFor="isActive" className="text-sm font-medium text-[#2F2F2F]/90">Active Item</label>
               </div>
-
-              {editingId && (
-                <div>
-                  <label className="text-sm font-medium text-[#2F2F2F]/90 block mb-1">Status</label>
-                  <select
-                    {...register("isActive")}
-                    className="w-full h-10 px-3 py-2 rounded-full bg-[#F8F4EE] border border-[#EFE7DD] text-[#2F2F2F] focus:outline-none focus:ring-1 focus:border-[#C68642] focus:ring-[#C68642]/30"
-                  >
-                    <option value="true">Active</option>
-                    <option value="false">Inactive</option>
-                  </select>
-                </div>
-              )}
 
               <div className="pt-4 flex gap-3">
                 <Button type="submit" className="flex-1 bg-gradient-to-r from-[#C68642] to-[#8B5E3C] hover:bg-[#C68642] text-[#FFFDF9] border-none">
-                  {editingId ? "Update" : "Save"}
+                  {editingId ? "Update Item" : "Save Item"}
                 </Button>
                 {editingId && (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => {
-                      setEditingId(null);
-                      reset({
-                        name: "",
-                        sku: "",
-                        barcode: "",
-                        hsnSac: "",
-                        unitName: "PCS",
-                        category: "",
-                        purchasePrice: 0,
-                        sellingPrice: 0,
-                        openingStock: 0,
-                        reorderLevel: 0,
-                        gstPercentage: 0,
-                        isActive: "true"
-                      });
-                    }}
-                    className="border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]"
-                  >
-                    Cancel
-                  </Button>
+                  <Button type="button" variant="outline" onClick={() => { setEditingId(null); reset(); }} className="flex-1 border-[#EFE7DD] text-[#2F2F2F]/90 hover:bg-[#E7C9A9] hover:text-[#2F2F2F]">Cancel</Button>
                 )}
               </div>
             </form>
@@ -346,7 +307,21 @@ export default function InventoryPage() {
         </div>
 
         {/* List Panel */}
-        <div className="lg:col-span-2">
+        <div className="lg:col-span-2 space-y-4">
+          <div className="bg-[#FFFDF9] p-4 border border-[#EFE7DD] rounded-xl shadow-md flex items-center gap-2">
+            <span className="text-sm font-medium text-[#2F2F2F]">Search:</span>
+            <Input
+              ref={searchInputRef}
+              type="text"
+              placeholder="Search items by name or SKU... (Ctrl+F)"
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setSelectedRowIndex(-1);
+              }}
+              className="bg-[#F8F4EE] border-[#EFE7DD] text-[#2F2F2F] placeholder:text-[#2F2F2F]/50 h-9"
+            />
+          </div>
           <div className="bg-[#FFFDF9] border border-[#EFE7DD] rounded-xl shadow-md overflow-x-auto">
             <table className="w-full text-sm text-left text-[#2F2F2F]/90 min-w-[700px]">
               <thead className="bg-[#F8F4EE]/50 text-[#2F2F2F]/70 uppercase text-xs border-b border-[#EFE7DD]">
@@ -359,17 +334,18 @@ export default function InventoryPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-700/50">
-                {items.length === 0 ? (
+                {filteredItems.length === 0 ? (
                   <tr>
                     <td colSpan="5" className="px-6 py-12 text-center text-[#2F2F2F]/50">
                       No stock items found for this company.
                     </td>
                   </tr>
                 ) : (
-                  items.map(item => {
+                  filteredItems.map((item, index) => {
                     const isLowStock = item.quantity <= item.reorder_level;
+                    const isSelected = index === selectedRowIndex;
                     return (
-                      <tr key={item.id} className={`hover:bg-[#E7C9A9] transition-colors ${!item.is_active ? 'opacity-50' : ''}`}>
+                      <tr key={item.id} className={`transition-colors ${!item.is_active ? 'opacity-50' : ''} ${isSelected ? 'bg-[#EFE7DD]' : 'hover:bg-[#E7C9A9]'}`}>
                         <td className="px-6 py-4">
                           <div className="font-semibold text-[#2F2F2F]">{item.item_name}</div>
                           {item.sku && <div className="text-xs text-[#2F2F2F]/50 mt-0.5">SKU: {item.sku}</div>}
